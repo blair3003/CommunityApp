@@ -13,17 +13,5 @@ namespace CommunityApp.Data
 
         public DbSet<Community> Communities { get; set; }
         public DbSet<Home> Homes { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Home>()
-                .HasOne(h => h.Community)
-                .WithMany(c => c.Homes)
-                .HasForeignKey(h => h.CommunityId)
-                .IsRequired(true)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
     }
 }

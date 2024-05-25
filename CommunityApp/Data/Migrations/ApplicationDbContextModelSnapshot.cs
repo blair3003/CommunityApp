@@ -376,7 +376,7 @@ namespace CommunityApp.Migrations
                     b.HasOne("CommunityApp.Data.Models.Community", "Community")
                         .WithMany("Homes")
                         .HasForeignKey("CommunityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Community");

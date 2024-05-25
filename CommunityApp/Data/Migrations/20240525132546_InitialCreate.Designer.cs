@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommunityApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240525131505_InitialCreate")]
+    [Migration("20240525132546_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -379,7 +379,7 @@ namespace CommunityApp.Migrations
                     b.HasOne("CommunityApp.Data.Models.Community", "Community")
                         .WithMany("Homes")
                         .HasForeignKey("CommunityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Community");
