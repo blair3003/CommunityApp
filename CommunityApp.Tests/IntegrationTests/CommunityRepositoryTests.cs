@@ -1,6 +1,7 @@
 ﻿using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Tests.IntegrationTests.Fixtures;
+using System.Net.Sockets;
 
 namespace CommunityApp.Tests.IntegrationTests
 {
@@ -40,25 +41,97 @@ namespace CommunityApp.Tests.IntegrationTests
         [Fact]
         public async Task GetByIdAsync_ReturnsCommunity()
         {
-            Assert.True(false);
+            var community = new Community { Id = 1, Name = "Community 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Communities.Add(community);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityRepository(context);
+                var result = await repository.GetByIdAsync(1);
+
+                Assert.NotNull(result);
+                Assert.Equal("Community 1", result.Name);
+            }
         }
 
         [Fact]
         public async Task AddAsync_CreatesCommunity()
         {
-            Assert.True(false);
+            var community = new Community { Id = 1, Name = "Community 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityRepository(context);
+                var newCommunity = await repository.AddAsync(community);
+
+                Assert.NotNull(newCommunity);
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var result = await context.Communities.FindAsync(1);
+
+                Assert.NotNull(result);
+                Assert.Equal("Community 1", result.Name);
+            }
         }
 
         [Fact]
         public async Task UpdateAsync_ModifiesCommunity()
         {
-            Assert.True(false);
+            var community = new Community { Id = 1, Name = "Community 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Communities.Add(community);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityRepository(context);
+
+                var communityToUpdate = await context.Communities.FindAsync(1);
+                Assert.NotNull(communityToUpdate);
+
+                communityToUpdate.Name = "Updated Community";
+
+                var result = await repository.UpdateAsync(1, communityToUpdate);
+
+                Assert.NotNull(result);
+                Assert.Equal("Updated Community", result.Name);
+            }
         }
 
         [Fact]
         public async Task DeleteAsync_RemovesCommunity()
         {
-            Assert.True(false);
+            var community = new Community { Id = 1, Name = "Community 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Communities.Add(community);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityRepository(context);
+
+                var result = await repository.DeleteAsync(1);
+                Assert.NotNull(result);
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var deletedTicket = await context.Communities.FindAsync(1);
+                Assert.Null(deletedTicket);
+            }
         }
 
         public void Dispose()

@@ -17,24 +17,54 @@ namespace CommunityApp.Data.Repositories
             return allCommunities;
         }
 
-        public Task<Community?> AddAsync(Community entity)
+        public async Task<Community?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var community = await _context.Communities
+                .Include(c => c.Homes)
+                .FirstOrDefaultAsync(c => id == c.Id);
+
+            return community;
         }
 
-        public Task<Community?> DeleteAsync(int id)
+        public async Task<Community?> AddAsync(Community community)
         {
-            throw new NotImplementedException();
+            await _context.Communities.AddAsync(community);
+            await _context.SaveChangesAsync();
+            return community;
         }
 
-        public Task<Community?> GetByIdAsync(int id)
+        public async Task<Community?> UpdateAsync(int id, Community community)
         {
-            throw new NotImplementedException();
+            if (id != community.Id)
+            {
+                return null;
+            }
+
+            var existingCommunity = await _context.Communities.FindAsync(id);
+
+            if (existingCommunity == null)
+            {
+                return null;
+            }
+
+            existingCommunity.Name = community.Name;
+
+            await _context.SaveChangesAsync();
+            return existingCommunity;
         }
 
-        public Task<Community?> UpdateAsync(Community entity)
+        public async Task<Community?> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var community = await _context.Communities.FindAsync(id);
+
+            if (community == null)
+            {
+                return null;
+            }
+
+            _context.Communities.Remove(community);
+            await _context.SaveChangesAsync();
+            return community;
         }
     }
 }
