@@ -1,16 +1,21 @@
 using CommunityApp.Data;
 using CommunityApp.Data.Models;
+using CommunityApp.Data.Repositories;
+using CommunityApp.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 builder.Services
     .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
