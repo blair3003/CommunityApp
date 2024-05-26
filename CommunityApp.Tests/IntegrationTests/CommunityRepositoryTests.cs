@@ -1,7 +1,6 @@
 ﻿using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Tests.IntegrationTests.Fixtures;
-using System.Net.Sockets;
 
 namespace CommunityApp.Tests.IntegrationTests
 {
