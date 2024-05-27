@@ -28,7 +28,6 @@ namespace CommunityApp.Tests.IntegrationTests
             {
                 var repository = new CommunityRepository(context);
                 var result = await repository.GetAllAsync();
-
                 Assert.NotNull(result);
                 Assert.Equal(3, result.Count);
                 Assert.Contains(result, c => c.Name == "Community 1");
@@ -52,7 +51,6 @@ namespace CommunityApp.Tests.IntegrationTests
             {
                 var repository = new CommunityRepository(context);
                 var result = await repository.GetByIdAsync(1);
-
                 Assert.NotNull(result);
                 Assert.Equal("Community 1", result.Name);
             }
@@ -67,14 +65,12 @@ namespace CommunityApp.Tests.IntegrationTests
             {
                 var repository = new CommunityRepository(context);
                 var newCommunity = await repository.AddAsync(community);
-
                 Assert.NotNull(newCommunity);
             }
 
             using (var context = _fixture.CreateContext())
             {
                 var result = await context.Communities.FindAsync(1);
-
                 Assert.NotNull(result);
                 Assert.Equal("Community 1", result.Name);
             }
@@ -93,17 +89,20 @@ namespace CommunityApp.Tests.IntegrationTests
 
             using (var context = _fixture.CreateContext())
             {
-                var repository = new CommunityRepository(context);
-
                 var communityToUpdate = await context.Communities.FindAsync(1);
                 Assert.NotNull(communityToUpdate);
-
                 communityToUpdate.Name = "Updated Community";
 
+                var repository = new CommunityRepository(context);
                 var result = await repository.UpdateAsync(1, communityToUpdate);
-
                 Assert.NotNull(result);
-                Assert.Equal("Updated Community", result.Name);
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var updatedCommunity = await context.Communities.FindAsync(1);
+                Assert.NotNull(updatedCommunity);
+                Assert.Equal("Updated Community", updatedCommunity.Name);
             }
         }
 
@@ -121,15 +120,14 @@ namespace CommunityApp.Tests.IntegrationTests
             using (var context = _fixture.CreateContext())
             {
                 var repository = new CommunityRepository(context);
-
                 var result = await repository.DeleteAsync(1);
                 Assert.NotNull(result);
             }
 
             using (var context = _fixture.CreateContext())
             {
-                var deletedTicket = await context.Communities.FindAsync(1);
-                Assert.Null(deletedTicket);
+                var deletedCommunity = await context.Communities.FindAsync(1);
+                Assert.Null(deletedCommunity);
             }
         }
 
