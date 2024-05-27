@@ -21,6 +21,7 @@ namespace CommunityApp.Data.Repositories
         {
             var community = await _context.Communities
                 .Include(c => c.Homes)
+                .Include(c => c.Managers)
                 .FirstOrDefaultAsync(c => id == c.Id);
 
             return community;
@@ -63,6 +64,44 @@ namespace CommunityApp.Data.Repositories
             }
 
             _context.Communities.Remove(community);
+            await _context.SaveChangesAsync();
+            return community;
+        }
+
+        public async Task<Community?> AssignManagerToCommunityAsync(string managerId, int communityId)
+        {
+            var manager = await _context.Users.FindAsync(managerId);
+            var community = await _context.Communities.FindAsync(communityId);
+
+            if (manager == null || community == null)
+            {
+                return null;
+            }
+
+            community.Managers.Add((ApplicationUser) manager);
+            await _context.SaveChangesAsync();
+            return community;
+        }
+
+        public async Task<Community?> RemoveManagerFromCommunityAsync(string managerId, int communityId)
+        {
+            var community = await _context.Communities
+                .Include(c => c.Managers)
+                .FirstOrDefaultAsync(c => c.Id == communityId);
+
+            if (community == null)
+            {
+                return null;
+            }
+
+            var manager = community.Managers.FirstOrDefault(m => m.Id == managerId);
+
+            if (manager == null)
+            {
+                return null;
+            }
+
+            community.Managers.Remove(manager);
             await _context.SaveChangesAsync();
             return community;
         }

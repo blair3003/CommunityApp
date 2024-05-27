@@ -6,7 +6,7 @@ namespace CommunityApp.Services
 {
     public class CommunityService(ICommunityRepository repository)
     {
-        ICommunityRepository _repository = repository;
+        private readonly ICommunityRepository _repository = repository;
 
         public async Task<List<Community>> GetAllCommunitiesAsync()
         {

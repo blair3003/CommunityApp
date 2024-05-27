@@ -4,5 +4,7 @@ namespace CommunityApp.Data.Repositories.Interfaces
 {
     public interface ICommunityRepository : IRepository<Community>
     {
+        Task<Community?> AssignManagerToCommunityAsync(string managerId, int communityId);
+        Task<Community?> RemoveManagerFromCommunityAsync(string managerId, int communityId);
     }
 }

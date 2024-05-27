@@ -1,7 +1,6 @@
 ﻿using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 
 namespace CommunityApp.Data.Repositories
 {
@@ -11,13 +10,17 @@ namespace CommunityApp.Data.Repositories
 
         public async Task<List<Home>> GetAllAsync()
         {
-            var allHomes = await _context.Homes.ToListAsync();
+            var allHomes = await _context.Homes
+                .Include(h => h.Community)
+                .ToListAsync();
             return allHomes;
         }
 
         public async Task<Home?> GetByIdAsync(int id)
         {
-            var home = await _context.Homes.FindAsync(id);
+            var home = await _context.Homes
+                .Include(h => h.Community)
+                .FirstOrDefaultAsync(h => h.Id == id);
             return home;
         }
 

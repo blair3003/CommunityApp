@@ -2,7 +2,6 @@
 using CommunityApp.Data.Repositories.Interfaces;
 using CommunityApp.Services;
 using Moq;
-using System.Net.Sockets;
 
 namespace CommunityApp.Tests.UnitTests
 {
