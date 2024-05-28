@@ -2,7 +2,7 @@
 
 namespace CommunityApp.Data.Repositories.Interfaces
 {
-    public interface IHomeRepository : IRepository<Home>
+    public interface IHomeRepository : IRepository<Home, int>
     {
     }
 }

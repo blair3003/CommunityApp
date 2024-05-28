@@ -1,11 +1,11 @@
 ﻿namespace CommunityApp.Data.Repositories.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T, TKey>
     {
         Task<List<T>> GetAllAsync();
-        Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(TKey id);
         Task<T?> AddAsync(T entity);
-        Task<T?> UpdateAsync(int id, T entity);
-        Task<T?> DeleteAsync(int id);
+        Task<T?> UpdateAsync(TKey id, T entity);
+        Task<T?> DeleteAsync(TKey id);
     }
 }
