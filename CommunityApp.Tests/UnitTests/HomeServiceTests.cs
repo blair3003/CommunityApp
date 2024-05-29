@@ -5,13 +5,21 @@ using Moq;
 
 namespace CommunityApp.Tests.UnitTests
 {
-    public class HomeServiceTests
+    public class HomeServiceTests : IDisposable
     {
+        private readonly Mock<IHomeRepository> _mockRepository;
+        private readonly HomeService _homeService;
+
+        public HomeServiceTests()
+        {
+            _mockRepository = new Mock<IHomeRepository>();
+            _homeService = new HomeService(_mockRepository.Object);
+        }
+
         [Fact]
         public async Task GetAllHomesAsync_ReturnsAllHomes()
         {
-            var mockRepository = new Mock<IHomeRepository>();
-
+            // Arrange
             var homes = new List<Home>
             {
                 new() { Id = 1, Number = "1" },
@@ -19,102 +27,166 @@ namespace CommunityApp.Tests.UnitTests
                 new() { Id = 3, Number = "3" }
             };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.GetAllAsync())
                 .ReturnsAsync(homes);
 
-            var homeService = new HomeService(mockRepository.Object);
+            // Act
+            var result = await _homeService.GetAllHomesAsync();
 
-            var result = await homeService.GetAllHomesAsync();
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(3, result.Count);
             Assert.Contains(result, c => c.Number == "1");
             Assert.Contains(result, c => c.Number == "2");
             Assert.Contains(result, c => c.Number == "3");
-
-            mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
         }
 
         [Fact]
         public async Task GetHomeByIdAsync_ReturnsHome()
         {
-            var mockRepository = new Mock<IHomeRepository>();
+            // Arrange
             var expectedHome = new Home { Id = 1, Number = "1" };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.GetByIdAsync(1))
                 .ReturnsAsync(expectedHome);
 
-            var homeService = new HomeService(mockRepository.Object);
+            // Act
+            var result = await _homeService.GetHomeByIdAsync(1);
 
-            var result = await homeService.GetHomeByIdAsync(1);
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal("1", result.Number);
+            _mockRepository.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+        }
 
-            mockRepository.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+        [Fact]
+        public async Task GetHomeByIdAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync((Home?)null);
+
+            // Act
+            var result = await _homeService.GetHomeByIdAsync(999);
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.GetByIdAsync(999), Times.Once);
         }
 
         [Fact]
         public async Task AddHomeAsync_CreatesHome()
         {
-            var mockRepository = new Mock<IHomeRepository>();
+            // Arrange
             var newHome = new Home { Id = 1, Number = "1" };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.AddAsync(It.IsAny<Home>()))
                 .ReturnsAsync((Home h) => h);
 
-            var homeService = new HomeService(mockRepository.Object);
+            // Act
+            var result = await _homeService.AddHomeAsync(newHome);
 
-            var result = await homeService.AddHomeAsync(newHome);
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(1, result.Id);
             Assert.Equal("1", result.Number);
-
-            mockRepository.Verify(repo => repo.AddAsync(It.Is<Home>(h => h == newHome)), Times.Once);
+            _mockRepository.Verify(repo => repo.AddAsync(It.Is<Home>(h => h == newHome)), Times.Once);
         }
 
         [Fact]
         public async Task UpdateHomeAsync_ModifiesHome()
         {
-            var mockRepository = new Mock<IHomeRepository>();
+            // Arrange
             var updatedHome = new Home { Id = 1, Number = "1" };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.UpdateAsync(1, It.IsAny<Home>()))
                 .ReturnsAsync(updatedHome);
 
-            var homeService = new HomeService(mockRepository.Object);
+            // Act
+            var result = await _homeService.UpdateHomeAsync(1, updatedHome);
 
-            var result = await homeService.UpdateHomeAsync(1, updatedHome);
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal("1", result.Number);
+            _mockRepository.Verify(repo => repo.UpdateAsync(1, updatedHome), Times.Once);
+        }
 
-            mockRepository.Verify(repo => repo.UpdateAsync(1, updatedHome), Times.Once);
+        [Fact]
+        public async Task UpdateHomeAsync_ReturnsNull_WhenIdMismatch()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.UpdateAsync(It.IsAny<int>(), It.IsAny<Home>()))
+                .ReturnsAsync((Home?)null);
+
+            // Act
+            var result = await _homeService.UpdateHomeAsync(999, new Home { Id = 1, Number = "2" });
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.UpdateAsync(999, It.IsAny<Home>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateHomeAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.UpdateAsync(It.IsAny<int>(), It.IsAny<Home>()))
+                .ReturnsAsync((Home?)null);
+
+            // Act
+            var result = await _homeService.UpdateHomeAsync(999, new Home { Id = 999, Number = "2" });
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.UpdateAsync(999, It.IsAny<Home>()), Times.Once);
         }
 
         [Fact]
         public async Task DeleteHomeAsync_RemovesHome()
         {
-            var mockRepository = new Mock<IHomeRepository>();
+            // Arrange
             var deletedHome = new Home { Id = 1, Number = "1" };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.DeleteAsync(1))
                 .ReturnsAsync(deletedHome);
 
-            var homeRepository = new HomeService(mockRepository.Object);
+            // Act
+            var result = await _homeService.DeleteHomeAsync(1);
 
-            var result = await homeRepository.DeleteHomeAsync(1);
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal("1", result.Number);
+            _mockRepository.Verify(repo => repo.DeleteAsync(1), Times.Once);
+        }
 
-            mockRepository.Verify(repo => repo.DeleteAsync(1), Times.Once);
+        [Fact]
+        public async Task DeleteHomeAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.DeleteAsync(It.IsAny<int>()))
+                .ReturnsAsync((Home?)null);
+
+            // Act
+            var result = await _homeService.DeleteHomeAsync(999);
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.DeleteAsync(999), Times.Once);
+        }
+
+        public void Dispose()
+        {
+            _mockRepository.Reset();
         }
     }
 }

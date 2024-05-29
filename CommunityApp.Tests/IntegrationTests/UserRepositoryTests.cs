@@ -1,13 +1,7 @@
 ﻿using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Tests.IntegrationTests.Fixtures;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommunityApp.Tests.IntegrationTests
 {
@@ -18,7 +12,6 @@ namespace CommunityApp.Tests.IntegrationTests
         public UserRepositoryTests(DatabaseFixture fixture)
         {
             _fixture = fixture;
-
             AddUsers().GetAwaiter().GetResult();
         }
 
@@ -52,6 +45,17 @@ namespace CommunityApp.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task GetByIdAsync_ReturnsNull_WhenUserDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new UserRepository(_fixture.UserManager);
+                var result = await repository.GetByIdAsync("999");
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
         public async Task DeleteAsync_RemovesUser()
         {
             using (var context = _fixture.CreateContext())
@@ -65,6 +69,17 @@ namespace CommunityApp.Tests.IntegrationTests
             {
                 var deletedUser = await _fixture.UserManager.FindByIdAsync("1");
                 Assert.Null(deletedUser);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ReturnsNull_WhenUserDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new UserRepository(_fixture.UserManager);
+                var result = await repository.DeleteAsync("999");
+                Assert.Null(result);
             }
         }
 
@@ -83,6 +98,17 @@ namespace CommunityApp.Tests.IntegrationTests
                 var userWithClaim = await _fixture.UserManager.FindByIdAsync("1");
                 var claims = await _fixture.UserManager.GetClaimsAsync(userWithClaim!);
                 Assert.Contains(claims, c => c.Type == "IsManager" && c.Value == "true");
+            }
+        }
+
+        [Fact]
+        public async Task AddIsManagerClaimAsync_ReturnsFalse_WhenUserDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new UserRepository(_fixture.UserManager);
+                var result = await repository.AddIsManagerClaimAsync("999");
+                Assert.False(result);
             }
         }
 
@@ -108,6 +134,17 @@ namespace CommunityApp.Tests.IntegrationTests
                 var userWithClaim = await _fixture.UserManager.FindByIdAsync("1");
                 var claims = await _fixture.UserManager.GetClaimsAsync(userWithClaim!);
                 Assert.DoesNotContain(claims, c => c.Type == "IsManager" && c.Value == "true");
+            }
+        }
+
+        [Fact]
+        public async Task RemoveIsManagerClaimAsync_ReturnsFalse_WhenUserDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new UserRepository(_fixture.UserManager);
+                var result = await repository.RemoveIsManagerClaimAsync("999");
+                Assert.False(result);
             }
         }
 

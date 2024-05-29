@@ -7,24 +7,21 @@ using System.Security.Claims;
 
 namespace CommunityApp.Tests.UnitTests
 {
-    public class CommunityServiceTests
+    public class CommunityServiceTests : IDisposable
     {
-        private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
+        private readonly Mock<ICommunityRepository> _mockRepository;
+        private readonly CommunityService _communityService;
 
         public CommunityServiceTests()
         {
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            _mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                Mock.Of<IUserStore<ApplicationUser>>(),
-                null, null, null, null, null, null, null, null)!;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            _mockRepository = new Mock<ICommunityRepository>();
+            _communityService = new CommunityService(_mockRepository.Object);
         }
 
         [Fact]
         public async Task GetAllCommunitiesAsync_ReturnsAllCommunities()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
-
+            // Arrange
             var communities = new List<Community>
             {
                 new() { Id = 1, Name = "Community 1" },
@@ -32,165 +29,166 @@ namespace CommunityApp.Tests.UnitTests
                 new() { Id = 3, Name = "Community 3" }
             };
 
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.GetAllAsync())
                 .ReturnsAsync(communities);
 
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
+            // Act
+            var result = await _communityService.GetAllCommunitiesAsync();
 
-            var result = await communityService.GetAllCommunitiesAsync();
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(3, result.Count);
             Assert.Contains(result, c => c.Name == "Community 1");
             Assert.Contains(result, c => c.Name == "Community 2");
             Assert.Contains(result, c => c.Name == "Community 3");
-
-            mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
         }
 
         [Fact]
         public async Task GetCommunityByIdAsync_ReturnsCommunity()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
+            // Arrange
+            var community = new Community { Id = 1, Name = "Community" };
 
-            var expectedCommunity = new Community { Id = 1, Name = "Community 1" };
-
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.GetByIdAsync(1))
-                .ReturnsAsync(expectedCommunity);
+                .ReturnsAsync(community);
 
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
+            // Act
+            var result = await _communityService.GetCommunityByIdAsync(1);
 
-            var result = await communityService.GetCommunityByIdAsync(1);
-
+            // Assert
             Assert.NotNull(result);
-            Assert.Equal("Community 1", result.Name);
+            Assert.Equal(community.Name, result.Name);
+            _mockRepository.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+        }
 
-            mockRepository.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+        [Fact]
+        public async Task GetCommunityByIdAsync_ReturnsNull_WhenCommunityDoesNotExist()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync((Community?)null);
+
+            // Act
+            var result = await _communityService.GetCommunityByIdAsync(999);
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.GetByIdAsync(999), Times.Once);
         }
 
         [Fact]
         public async Task AddCommunityAsync_CreatesCommunity()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
+            // Arrange
+            var newCommunity = new Community { Id = 1, Name = "New Community" };
 
-            var newCommunity = new Community { Id = 1, Name = "Community 1" };
-
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.AddAsync(It.IsAny<Community>()))
                 .ReturnsAsync((Community c) => c);
 
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
+            // Act
+            var result = await _communityService.AddCommunityAsync(newCommunity);
 
-            var result = await communityService.AddCommunityAsync(newCommunity);
-
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(1, result.Id);
-            Assert.Equal("Community 1", result.Name);
-
-            mockRepository.Verify(repo => repo.AddAsync(It.Is<Community>(c => c == newCommunity)), Times.Once);
+            Assert.Equal(newCommunity.Name, result.Name);
+            _mockRepository.Verify(repo => repo.AddAsync(It.Is<Community>(c => c == newCommunity)), Times.Once);
         }
 
         [Fact]
         public async Task UpdateCommunityAsync_ModifiesCommunity()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
+            // Arrange
+            var updatedCommunity = new Community { Id = 1, Name = "Updated Community" };
 
-            var updatedCommunity = new Community { Id = 1, Name = "Community 1" };
-
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.UpdateAsync(1, It.IsAny<Community>()))
                 .ReturnsAsync(updatedCommunity);
 
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
+            // Act
+            var result = await _communityService.UpdateCommunityAsync(1, updatedCommunity);
 
-            var result = await communityService.UpdateCommunityAsync(1, updatedCommunity);
-
+            // Assert
             Assert.NotNull(result);
-            Assert.Equal("Community 1", result.Name);
+            Assert.Equal(updatedCommunity.Name, result.Name);
+            _mockRepository.Verify(repo => repo.UpdateAsync(1, updatedCommunity), Times.Once);
+        }
 
-            mockRepository.Verify(repo => repo.UpdateAsync(1, updatedCommunity), Times.Once);
+        [Fact]
+        public async Task UpdateCommunityAsync_ReturnsNull_WhenIdMismatch()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.UpdateAsync(It.IsAny<int>(), It.IsAny<Community>()))
+                .ReturnsAsync((Community?)null);
+
+            // Act
+            var result = await _communityService.UpdateCommunityAsync(999, new Community { Id = 1, Name = "Updated Community" });
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.UpdateAsync(999, It.IsAny<Community>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateCommunityAsync_ReturnsNull_WhenCommunityDoesNotExist()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.UpdateAsync(It.IsAny<int>(), It.IsAny<Community>()))
+                .ReturnsAsync((Community?)null);
+
+            // Act
+            var result = await _communityService.UpdateCommunityAsync(999, new Community { Id = 999, Name = "Updated Community" });
+
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.UpdateAsync(999, It.IsAny<Community>()), Times.Once);
         }
 
         [Fact]
         public async Task DeleteCommunityAsync_RemovesCommunity()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
+            // Arrange
+            var deletedCommunity = new Community { Id = 1, Name = "Deleted Community" };
 
-            var deletedCommunity = new Community { Id = 1, Name = "Community 1" };
-
-            mockRepository
+            _mockRepository
                 .Setup(repo => repo.DeleteAsync(1))
                 .ReturnsAsync(deletedCommunity);
 
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
+            // Act
+            var result = await _communityService.DeleteCommunityAsync(1);
 
-            var result = await communityService.DeleteCommunityAsync(1);
-
+            // Assert
             Assert.NotNull(result);
-            Assert.Equal("Community 1", result.Name);
-
-            mockRepository.Verify(repo => repo.DeleteAsync(1), Times.Once);
+            Assert.Equal(deletedCommunity.Name, result.Name);
+            _mockRepository.Verify(repo => repo.DeleteAsync(1), Times.Once);
         }
 
         [Fact]
-        public async Task AssignManagerToCommunityAsync_AssignsManager()
+        public async Task DeleteCommunityAsync_ReturnsNull_WhenCommunityDoesNotExist()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
-            var managerId = "manager1";
-            var communityId = 1;
-            var user = new ApplicationUser { Id = managerId, UserName = "manager" };
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.DeleteAsync(It.IsAny<int>()))
+                .ReturnsAsync((Community?)null);
 
-            _mockUserManager
-                .Setup(um => um.FindByIdAsync(managerId))
-                .ReturnsAsync(user);
+            // Act
+            var result = await _communityService.DeleteCommunityAsync(999);
 
-            _mockUserManager
-                .Setup(um => um.GetClaimsAsync(user))
-                .ReturnsAsync(
-                [
-                    new Claim("IsManager", "true")
-                ]);
-
-            var expectedCommunity = new Community { Id = communityId, Name = "Community 1" };
-
-            mockRepository
-                .Setup(repo => repo.AssignManagerToCommunityAsync(managerId, communityId))
-                .ReturnsAsync(expectedCommunity);
-
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
-
-            var result = await communityService.AssignManagerToCommunityAsync(managerId, communityId);
-
-            Assert.NotNull(result);
-            Assert.Equal(expectedCommunity.Name, result.Name);
-
-            _mockUserManager.Verify(um => um.FindByIdAsync(managerId), Times.Once);
-            _mockUserManager.Verify(um => um.GetClaimsAsync(user), Times.Once);
-            mockRepository.Verify(repo => repo.AssignManagerToCommunityAsync(managerId, communityId), Times.Once);
+            // Assert
+            Assert.Null(result);
+            _mockRepository.Verify(repo => repo.DeleteAsync(999), Times.Once);
         }
 
-        [Fact]
-        public async Task RemoveManagerFromCommunityAsync_RemovesManager()
+        public void Dispose()
         {
-            var mockRepository = new Mock<ICommunityRepository>();
-            var managerId = "manager1";
-            var communityId = 1;
-            var expectedCommunity = new Community { Id = communityId, Name = "Community 1" };
-
-            mockRepository
-                .Setup(repo => repo.RemoveManagerFromCommunityAsync(managerId, communityId))
-                .ReturnsAsync(expectedCommunity);
-
-            var communityService = new CommunityService(mockRepository.Object, _mockUserManager.Object);
-
-            var result = await communityService.RemoveManagerFromCommunityAsync(managerId, communityId);
-
-            Assert.NotNull(result);
-            Assert.Equal(expectedCommunity.Name, result.Name);
-
-            mockRepository.Verify(repo => repo.RemoveManagerFromCommunityAsync(managerId, communityId), Times.Once);
+            _mockRepository.Reset();
         }
     }
 }

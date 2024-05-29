@@ -11,7 +11,6 @@ namespace CommunityApp.Tests.IntegrationTests
         public HomeRepositoryTests(DatabaseFixture fixture)
         {
             _fixture = fixture;
-
             AddCommunities().GetAwaiter().GetResult();
         }
 
@@ -60,6 +59,17 @@ namespace CommunityApp.Tests.IntegrationTests
                 var result = await repository.GetByIdAsync(1);
                 Assert.NotNull(result);
                 Assert.Equal("1", result.Number);
+            }
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new HomeRepository(context);
+                var result = await repository.GetByIdAsync(999);
+                Assert.Null(result);
             }
         }
 
@@ -114,6 +124,39 @@ namespace CommunityApp.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task UpdateAsync_ReturnsNull_WhenIdMismatch()
+        {
+            var home = new Home { Id = 1, CommunityId = 1, Number = "1" };
+            var homeUpdate = new Home { Id = 2, CommunityId = 1, Number = "2" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Homes.Add(home);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new HomeRepository(context);
+                var result = await repository.UpdateAsync(1, homeUpdate);
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            var homeUpdate = new Home { Id = 999, CommunityId = 1, Number = "2" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new HomeRepository(context);
+                var result = await repository.UpdateAsync(999, homeUpdate);
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
         public async Task DeleteAsync_RemovesHome()
         {
             var home = new Home { Id = 1, CommunityId = 1, Number = "1" };
@@ -135,6 +178,17 @@ namespace CommunityApp.Tests.IntegrationTests
             {
                 var deletedHome = await context.Homes.FindAsync(1);
                 Assert.Null(deletedHome);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ReturnsNull_WhenHomeDoesNotExist()
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new HomeRepository(context);
+                var result = await repository.DeleteAsync(999);
+                Assert.Null(result);
             }
         }
 
