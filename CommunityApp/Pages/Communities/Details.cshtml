@@ -1,0 +1,10 @@
+﻿@page "/Communities/{Id:int}"
+@model CommunityApp.Pages.Communities.DetailsModel
+@{
+    ViewData["Title"] = $"{Model.Community.Name}";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+</section>

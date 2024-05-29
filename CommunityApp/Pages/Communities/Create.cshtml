@@ -1,0 +1,25 @@
+﻿@page "/Communities/Create"
+@model CommunityApp.Pages.Communities.CreateModel
+@{
+    ViewData["Title"] = "Create Community";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <div class="form-group mb-2">
+            <label asp-for="Input.Name"></label>
+            <input asp-for="Input.Name" class="form-control" />
+            <span asp-validation-for="Input.Name" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
