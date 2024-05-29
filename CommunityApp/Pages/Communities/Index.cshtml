@@ -1,0 +1,19 @@
+﻿@page
+@model CommunityApp.Pages.Communities.IndexModel
+@{
+    ViewData["Title"] = "All Communities";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <a asp-page="./Create">Create New</a>
+
+    <ul>
+        @foreach (var community in Model.Communities)
+        {
+            <li><a asp-page="./Details" asp-route-Id="@community.Id">@community.Name</a></li>
+        }
+    </ul>
+
+</section>

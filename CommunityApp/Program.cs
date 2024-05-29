@@ -2,6 +2,7 @@ using CommunityApp.Data;
 using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Data.Repositories.Interfaces;
+using CommunityApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+builder.Services.AddScoped<CommunityService>();
 
 builder.Services.AddRazorPages();
 

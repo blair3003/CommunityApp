@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EF7DC490-B4D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC8F5E55-F34B-4768-AC27-93F329899F56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityApp.Tests", "CommunityApp.Tests\CommunityApp.Tests.csproj", "{01FF34F5-A445-418E-87FE-75854828972B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityApp.Tests", "CommunityApp.Tests\CommunityApp.Tests.csproj", "{01FF34F5-A445-418E-87FE-75854828972B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
