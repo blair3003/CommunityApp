@@ -12,7 +12,7 @@
     <ul>
         @foreach (var community in Model.Communities)
         {
-            <li><a asp-page="./Details" asp-route-Id="@community.Id">@community.Name</a></li>
+            <li><a asp-page="./Details" asp-route-CommunityId="@community.Id">@community.Name</a></li>
         }
     </ul>
 

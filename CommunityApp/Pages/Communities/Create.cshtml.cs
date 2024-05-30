@@ -1,5 +1,4 @@
 using CommunityApp.Data.Models;
-using CommunityApp.Pages.Communities.InputModels;
 using CommunityApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -34,7 +33,7 @@ namespace CommunityApp.Pages.Communities
                     }
                 ) ?? throw new InvalidOperationException("Community creation failed.");
 
-                return RedirectToPage("./Details/", new { newCommunity.Id });
+                return RedirectToPage("./Details/", new { CommunityId = newCommunity.Id });
             }
             catch
             {

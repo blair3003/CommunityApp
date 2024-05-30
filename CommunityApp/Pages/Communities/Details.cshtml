@@ -1,10 +1,26 @@
-﻿@page "/Communities/{Id:int}"
+﻿@page "/Communities/{CommunityId:int}"
 @model CommunityApp.Pages.Communities.DetailsModel
 @{
-    ViewData["Title"] = $"{Model.Community.Name}";
+    ViewData["Title"] = $"{Model.Community!.Name}";
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1 class="h3">@ViewData["Title"]</h1>
+
+
+    <h3 class="h4">Homes</h3>
+
+    <ul>
+        @foreach(var home in Model.Community!.Homes)
+        {
+            <li><a asp-page="./Homes/Details" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@home.Id">@home.Id</a></li>
+        }
+    </ul>
+
+    <a asp-page="./Delete" asp-route-CommunityId="@Model.CommunityId" class="btn btn-danger">Delete</a>
+
+    <a asp-page="./Edit" asp-route-CommunityId="@Model.CommunityId" class="btn btn-secondary ml-2">Edit</a>
+
+    <a asp-page="./Index" class="btn btn-primary ml-2">Back to Communities</a>
 
 </section>

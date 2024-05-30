@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommunityApp.Pages.Communities.InputModels
+namespace CommunityApp.Data.Models
 {
-    public class CreateCommunityInput
+    public class UpdateCommunityInput
     {
         [Required]
         [StringLength(100, ErrorMessage = "Maximum length is {1}")]
