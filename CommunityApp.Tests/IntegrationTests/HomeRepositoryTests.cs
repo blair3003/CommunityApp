@@ -94,6 +94,19 @@ namespace CommunityApp.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task AddAsync_ReturnsNull_WhenCommunityDoesNotExist()
+        {
+            var home = new Home { Id = 1, CommunityId = 999, Number = "1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new HomeRepository(context);
+                var newHome = await repository.AddAsync(home);
+                Assert.Null(newHome);
+            }
+        }
+
+        [Fact]
         public async Task UpdateAsync_ModifiesHome()
         {
             var home = new Home { Id = 1, CommunityId = 1, Number = "1" };

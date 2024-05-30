@@ -26,6 +26,13 @@ namespace CommunityApp.Data.Repositories
 
         public async Task<Home?> AddAsync(Home home)
         {
+            var existingCommunity = await _context.Communities.FindAsync(home.CommunityId);
+
+            if (existingCommunity == null)
+            {
+                return null;
+            }
+
             await _context.Homes.AddAsync(home);
             await _context.SaveChangesAsync();
             return home;
