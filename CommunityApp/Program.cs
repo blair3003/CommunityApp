@@ -16,7 +16,9 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<CommunityService>();
+builder.Services.AddScoped<HomeService>();
 
 builder.Services.AddRazorPages();
 

@@ -3,30 +3,31 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
 
-namespace CommunityApp.Pages.Communities
+namespace CommunityApp.Pages.Communities.Homes
 {
     public class DeleteModel : PageModel
     {
+        private readonly HomeService _homeService;
         private readonly CommunityService _communityService;
 
         [BindProperty(SupportsGet = true)]
+        public int HomeId { get; set; }
+        [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
-        public Community? Community { get; set; }
-        public bool CanDelete { get; set; } = false;
+        public Home? Home { get; set; }
 
-        public DeleteModel(CommunityService communityService)
+        public DeleteModel(CommunityService communityService, HomeService homeService)
         {
             _communityService = communityService;
+            _homeService = homeService;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                Community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
-
-                CanDelete = Community.Homes.Count == 0;
+                Home = await _homeService.GetHomeByIdAsync(HomeId)
+                    ?? throw new InvalidOperationException("Home retrieval failed.");
 
                 return Page();
             }
@@ -40,10 +41,10 @@ namespace CommunityApp.Pages.Communities
         {
             try
             {
-                Community = await _communityService.DeleteCommunityAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community delete failed.");
+                Home = await _homeService.DeleteHomeAsync(HomeId)
+                    ?? throw new InvalidOperationException("Home delete failed.");
 
-                return RedirectToPage("./Index");
+                return RedirectToPage("../Details/", new { CommunityId });
             }
             catch
             {

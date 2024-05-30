@@ -63,6 +63,13 @@ namespace CommunityApp.Data.Repositories
                 return null;
             }
 
+            var hasHomes = await _context.Homes.AnyAsync(h => h.CommunityId == id);
+
+            if (hasHomes)
+            {
+                return null;
+            }
+
             _context.Communities.Remove(community);
             await _context.SaveChangesAsync();
             return community;

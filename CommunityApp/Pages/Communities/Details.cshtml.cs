@@ -12,6 +12,7 @@ namespace CommunityApp.Pages.Communities
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         public Community? Community { get; set; }
+        public bool CanDelete { get; set; } = false;
 
         public DetailsModel(CommunityService communityService)
         {
@@ -24,6 +25,8 @@ namespace CommunityApp.Pages.Communities
             {
                 Community = await _communityService.GetCommunityByIdAsync(CommunityId)
                     ?? throw new InvalidOperationException("Community retrieval failed.");
+
+                CanDelete = Community.Homes.Count == 0;
 
                 return Page();
             }

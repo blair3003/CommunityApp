@@ -189,6 +189,36 @@ namespace CommunityApp.Tests.IntegrationTests
             }
         }
 
+        [Fact]
+        public async Task DeleteAsync_ReturnsNull_WhenCommunityHasHomes()
+        {
+            var community = new Community { Id = 1, Name = "Community 1" };
+            var home = new Home { Id = 1, CommunityId = 1, Number = "Home 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Communities.Add(community);
+                context.Homes.Add(home);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityRepository(context);
+                var result = await repository.DeleteAsync(1);
+                Assert.Null(result);
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var deletedCommunity = await context.Communities.FindAsync(1);
+                Assert.NotNull(deletedCommunity);
+
+                var deletedHome = await context.Homes.FindAsync(1);
+                Assert.NotNull(deletedHome);
+            }
+        }
+
         public void Dispose()
         {
             using (var context = _fixture.CreateContext())

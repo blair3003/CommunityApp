@@ -1,0 +1,106 @@
+﻿@page "/Communities/{CommunityId:int}/Homes/{HomeId:int}"
+@model CommunityApp.Pages.Communities.Homes.DetailsModel
+@{
+    ViewData["Title"] = "Home Details";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Floor:</dt>
+                <dd class="col-sm-8">@Model.Home!.Floor</dd>
+
+                <dt class="col-sm-4">Number:</dt>
+                <dd class="col-sm-8">@Model.Home!.Number</dd>
+
+                <dt class="col-sm-4">Street:</dt>
+                <dd class="col-sm-8">@Model.Home!.Street</dd>
+
+                <dt class="col-sm-4">City:</dt>
+                <dd class="col-sm-8">@Model.Home!.City</dd>
+
+                <dt class="col-sm-4">State:</dt>
+                <dd class="col-sm-8">@Model.Home!.State</dd>
+
+                <dt class="col-sm-4">Zip:</dt>
+                <dd class="col-sm-8">@Model.Home!.Zip</dd>
+
+                <dt class="col-sm-4">Country:</dt>
+                <dd class="col-sm-8">@Model.Home!.Country</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Type:</dt>
+                <dd class="col-sm-8">@Model.Home!.Type</dd>
+
+                <dt class="col-sm-4">Bedrooms:</dt>
+                <dd class="col-sm-8">@Model.Home!.Bedrooms</dd>
+
+                <dt class="col-sm-4">Bathrooms:</dt>
+                <dd class="col-sm-8">@Model.Home!.Bathrooms</dd>
+
+                <dt class="col-sm-4">Square Footage:</dt>
+                <dd class="col-sm-8">@Model.Home!.SqFt</dd>
+
+                <dt class="col-sm-4">Year Built:</dt>
+                <dd class="col-sm-8">@Model.Home!.YearBuilt</dd>
+
+                <dt class="col-sm-4">Year Renovated:</dt>
+                <dd class="col-sm-8">@Model.Home!.YearRenovated</dd>
+
+                <dt class="col-sm-4">Is Furnished:</dt>
+                <dd class="col-sm-8">@Model.Home!.IsFurnished</dd>
+
+                <dt class="col-sm-4">Has Parking:</dt>
+                <dd class="col-sm-8">@Model.Home!.HasParking</dd>
+
+                <dt class="col-sm-4">Parking Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.ParkingDetails</dd>
+
+                <dt class="col-sm-4">Security Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.SecurityDetails</dd>
+
+                <dt class="col-sm-4">Utilities Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.UtilitiesDetails</dd>
+
+                <dt class="col-sm-4">Accessibility Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.AccessibilityDetails</dd>
+
+                <dt class="col-sm-4">Pet Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.PetDetails</dd>
+
+                <dt class="col-sm-4">Other Details:</dt>
+                <dd class="col-sm-8">@Model.Home!.OtherDetails</dd>
+
+                <dt class="col-sm-4">Laundry:</dt>
+                <dd class="col-sm-8">@Model.Home!.Laundry</dd>
+
+                <dt class="col-sm-4">Heating:</dt>
+                <dd class="col-sm-8">@Model.Home!.Heating</dd>
+
+                <dt class="col-sm-4">Cooling:</dt>
+                <dd class="col-sm-8">@Model.Home!.Cooling</dd>
+
+                <dt class="col-sm-4">Outdoor Space:</dt>
+                <dd class="col-sm-8">@Model.Home!.OutdoorSpace</dd>
+
+                <dt class="col-sm-4">Base Rent:</dt>
+                <dd class="col-sm-8">@Model.Home!.BaseRent</dd>
+
+                <dt class="col-sm-4">Base Deposit:</dt>
+                <dd class="col-sm-8">@Model.Home!.BaseDeposit</dd>
+            </dl>
+        </div>
+    </div>
+
+    <a asp-page="./Delete" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@Model.HomeId" class="btn btn-danger">Delete</a>
+
+    <a asp-page="./Edit" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary ml-2">Edit</a>
+
+    <a asp-page="/Communities/Details" asp-route-CommunityId="@Model.CommunityId" class="btn btn-primary ml-2">Back to Community</a>
+
+</section>
