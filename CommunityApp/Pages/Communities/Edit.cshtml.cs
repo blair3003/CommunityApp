@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityApp.Pages.Communities
 {
+    [Authorize("AdminOnly")]
     public class EditModel : PageModel
     {
         private readonly CommunityService _communityService;

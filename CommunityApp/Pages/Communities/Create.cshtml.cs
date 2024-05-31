@@ -1,10 +1,12 @@
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CommunityApp.Pages.Communities
 {
+    [Authorize("AdminOnly")]
     public class CreateModel : PageModel
     {
         private readonly CommunityService _communityService;
