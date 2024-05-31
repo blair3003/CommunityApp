@@ -2,7 +2,9 @@ using CommunityApp.Data;
 using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Data.Repositories.Interfaces;
+using CommunityApp.Policies;
 using CommunityApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,11 +21,15 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdmin", "true"));
     options.AddPolicy("ManagerOnly", policy => policy.RequireClaim("IsManager", "true"));
+    options.AddPolicy("CommunityManager", policy => policy.Requirements.Add(new CommunityManagerRequirement()));
 });
 
+builder.Services.AddSingleton<IAuthorizationHandler, CommunityManagerAuthorizationHandler>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+builder.Services.AddScoped<ICommunityManagerRepository, CommunityManagerRepository>();
 builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<CommunityService>();
+builder.Services.AddScoped<CommunityManagerService>();
 builder.Services.AddScoped<HomeService>();
 
 builder.Services.AddRazorPages();

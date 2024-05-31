@@ -9,6 +9,12 @@ namespace CommunityApp.Services
         private readonly ICommunityManagerRepository _repository = repository;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
+        public async Task<List<Community>> GetCommunitiesByManagerIdAsync(string managerId)
+        {
+            var managerCommunities = await _repository.GetCommunitiesByManagerIdAsync(managerId);
+            return managerCommunities;
+        }
+
         public async Task<bool> AddManagerToCommunityAsync(string managerId, int communityId)
         {
             try

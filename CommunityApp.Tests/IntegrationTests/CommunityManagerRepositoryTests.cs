@@ -15,6 +15,30 @@ namespace CommunityApp.Tests.IntegrationTests
         }
 
         [Fact]
+        public async Task GetCommunitiesByManagerIdAsync_ReturnsCommunitiesForManager()
+        {
+            var manager = new ApplicationUser { Id = "1", UserName = "TestUser", Email = "test@user.com" };
+            var community = new Community { Id = 1, Name = "Community 1" };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Users.Add(manager);
+                community.Managers.Add(manager);
+                context.Communities.Add(community);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityManagerRepository(context);
+                var result = await repository.GetCommunitiesByManagerIdAsync("1");
+                Assert.NotNull(result);
+                Assert.Single(result);
+                Assert.Contains(result, c => c.Name == "Community 1");
+            }
+        }
+
+        [Fact]
         public async Task AddManagerToCommunityAsync_AddsManagerToCommunity()
         {
             var manager = new ApplicationUser { Id = "1", UserName = "TestUser", Email = "test@user.com" };

@@ -1,22 +1,28 @@
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CommunityApp.Pages.Communities.Homes
 {
+    [Authorize("ManagerOnly")]
     public class CreateModel : PageModel
     {
         private readonly HomeService _homeService;
+        private readonly CommunityService _communityService;
+        private readonly IAuthorizationService _authorizationService;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         [BindProperty]
         public CreateHomeInput Input { get; set; } = new CreateHomeInput();
 
-        public CreateModel(HomeService homeService)
+        public CreateModel(HomeService homeService, CommunityService communityService, IAuthorizationService authorizationService)
         {
             _homeService = homeService;
+            _communityService = communityService;
+            _authorizationService = authorizationService;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -28,10 +34,19 @@ namespace CommunityApp.Pages.Communities.Homes
 
             try
             {
+                var community = await _communityService.GetCommunityByIdAsync(CommunityId)
+                    ?? throw new InvalidOperationException("Community retrieval failed.");
+
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
+                if (!authorizationResult.Succeeded)
+                {
+                    throw new InvalidOperationException("Access denied.");
+                }
+
                 var newHome = await _homeService.AddHomeAsync(
                     new Home
                     {
-                        CommunityId = CommunityId,
+                        CommunityId = community.Id,
                         Floor = Input.Floor,
                         Number = Input.Number,
                         Street = Input.Street,

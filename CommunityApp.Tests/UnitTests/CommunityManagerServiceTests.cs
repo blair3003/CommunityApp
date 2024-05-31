@@ -24,6 +24,31 @@ namespace CommunityApp.Tests.UnitTests
         }
 
         [Fact]
+        public async Task GetCommunitiesByManagerIdAsync_ReturnsCommunitiesForManager()
+        {
+            // Arrange
+            var communities = new List<Community>
+            {
+                new() { Id = 1, Name = "Community 1" },
+                new() { Id = 2, Name = "Community 2" }
+            };
+
+            _mockRepository
+                .Setup(repo => repo.GetCommunitiesByManagerIdAsync("1"))
+                .ReturnsAsync(communities);
+
+            // Act
+            var result = await _communityManagerService.GetCommunitiesByManagerIdAsync("1");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, c => c.Name == "Community 1");
+            Assert.Contains(result, c => c.Name == "Community 2");
+            _mockRepository.Verify(repo => repo.GetCommunitiesByManagerIdAsync("1"), Times.Once);
+        }
+
+        [Fact]
         public async Task AddManagerToCommunityAsync_AddsManager()
         {
             // Arrange            
