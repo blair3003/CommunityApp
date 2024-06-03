@@ -10,18 +10,17 @@ namespace CommunityApp.Pages.Communities
     public class DetailsModel : PageModel
     {
         private readonly CommunityService _communityService;
-        private readonly CommunityManagerService _communityManagerService;
         private readonly IAuthorizationService _authorizationService;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         public Community? Community { get; set; }
         public bool CanDelete { get; set; } = false;
+        public bool CanAddManagers { get; set; } = false;
 
-        public DetailsModel(CommunityService communityService, CommunityManagerService communityManagerService, IAuthorizationService authorizationService)
+        public DetailsModel(CommunityService communityService, IAuthorizationService authorizationService)
         {
             _communityService = communityService;
-            _communityManagerService = communityManagerService;
             _authorizationService = authorizationService;
         }
 
@@ -38,6 +37,8 @@ namespace CommunityApp.Pages.Communities
                     throw new InvalidOperationException("Access denied.");
                 }
 
+                var isAdmin = await _authorizationService.AuthorizeAsync(User, "AdminOnly");
+                CanAddManagers = isAdmin.Succeeded;
                 CanDelete = Community.Homes.Count == 0;
 
                 return Page();
@@ -45,20 +46,6 @@ namespace CommunityApp.Pages.Communities
             catch
             {
                 return NotFound();
-            }
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            try
-            {
-                var managerAdded = await _communityManagerService.AddManagerToCommunityAsync("30193cf0-4ef3-4a76-8b91-9599638783cb", CommunityId);
-
-                return RedirectToPage("./Details/", new { CommunityId = CommunityId });
-            }
-            catch
-            {
-                return RedirectToPage("/Error");
             }
         }
     }

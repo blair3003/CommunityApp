@@ -28,9 +28,11 @@ builder.Services.AddSingleton<IAuthorizationHandler, CommunityManagerAuthorizati
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 builder.Services.AddScoped<ICommunityManagerRepository, CommunityManagerRepository>();
 builder.Services.AddScoped<IHomeRepository, HomeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CommunityService>();
 builder.Services.AddScoped<CommunityManagerService>();
 builder.Services.AddScoped<HomeService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddRazorPages();
 

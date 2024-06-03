@@ -1,0 +1,43 @@
+﻿@page "/Users/{UserId}"
+@model CommunityApp.Pages.Users.DetailsModel
+@{
+    ViewData["Title"] = $"{Model.UserDto!.UserName}";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <dl class="row">
+        <dt class="col-sm-4">Id:</dt>
+        <dd class="col-sm-8">@Model.UserDto!.Id</dd>
+
+        <dt class="col-sm-4">UserName:</dt>
+        <dd class="col-sm-8">@Model.UserDto!.UserName</dd>
+
+        <dt class="col-sm-4">Email:</dt>
+        <dd class="col-sm-8">@Model.UserDto!.Email</dd>
+
+        <dt class="col-sm-4">IsAdmin:</dt>
+        <dd class="col-sm-8">@Model.UserDto!.IsAdmin</dd>
+
+        <dt class="col-sm-4">IsManager:</dt>
+        <dd class="col-sm-8">@Model.UserDto!.IsManager</dd>
+    </dl>
+
+    @if (!Model.UserDto!.IsAdmin)
+    {
+        <a asp-page="./Delete" asp-route-UserId="@Model.UserId" class="btn btn-danger">Delete</a>
+    }
+
+    @if (!Model.UserDto!.IsManager)
+    {
+        <a asp-page="./AddManager" asp-route-UserId="@Model.UserId" class="btn btn-info">Make Manager</a>
+    }
+    else
+    {
+    <a asp-page="./RemoveManager" asp-route-UserId="@Model.UserId" class="btn btn-info">Remove Manager</a>
+    }
+
+    <a asp-page="./Index" class="btn btn-primary ml-2">Back to List</a>
+
+</section>

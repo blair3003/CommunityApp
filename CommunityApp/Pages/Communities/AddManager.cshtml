@@ -1,0 +1,31 @@
+﻿@page "/Communities/{CommunityId:int}/AddManager"
+@model CommunityApp.Pages.Communities.AddManagerModel
+@{
+    ViewData["Title"] = "Add Manager";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <div class="form-group mb-2">
+            <label asp-for="UserId"></label>
+            <select asp-for="UserId" class="form-control" required>
+                <option value="">-- Select Manager --</option>
+                @foreach (var manager in Model.Managers)
+                {
+                    <option value="@manager.Id">@manager.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

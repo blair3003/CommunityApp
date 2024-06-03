@@ -1,19 +1,25 @@
 ﻿using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories.Interfaces;
 using CommunityApp.Services;
+using Microsoft.AspNetCore.Identity;
 using Moq;
+using System.Security.Claims;
 
 namespace CommunityApp.Tests.UnitTests
 {
     public class UserServiceTests : IDisposable
     {
         private readonly Mock<IUserRepository> _mockRepository;
+        private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
         private readonly UserService _userService;
 
         public UserServiceTests()
         {
             _mockRepository = new Mock<IUserRepository>();
-            _userService = new UserService(_mockRepository.Object);
+            _mockUserManager = new Mock<UserManager<ApplicationUser>>(
+                Mock.Of<IUserStore<ApplicationUser>>(),
+                null!, null!, null!, null!, null!, null!, null!, null!);
+            _userService = new UserService(_mockRepository.Object, _mockUserManager.Object);
         }
 
         [Fact]
@@ -85,11 +91,15 @@ namespace CommunityApp.Tests.UnitTests
         {
             // Arrange
             var userId = "1";
+            var user = new ApplicationUser { Id = userId, UserName = "user1" };
             var deletedUser = new UserDto { Id = userId, UserName = "user1" };
 
             _mockRepository
                 .Setup(repo => repo.DeleteAsync(userId))
                 .ReturnsAsync(deletedUser);
+
+            _mockUserManager.Setup(um => um.FindByIdAsync(userId)).ReturnsAsync(user);
+            _mockUserManager.Setup(um => um.GetClaimsAsync(user)).ReturnsAsync([]);
 
             // Act
             var result = await _userService.DeleteUserAsync(userId);
@@ -102,19 +112,18 @@ namespace CommunityApp.Tests.UnitTests
         }
 
         [Fact]
-        public async Task DeleteUserAsync_ReturnsNull_WhenUserDoesNotExist()
+        public async Task DeleteUserAsync_ThrowsException_WhenUserDoesNotExist()
         {
             // Arrange
             _mockRepository
                 .Setup(repo => repo.DeleteAsync(It.IsAny<string>()))
                 .ReturnsAsync((UserDto?)null);
 
-            // Act
-            var result = await _userService.DeleteUserAsync("999");
+            _mockUserManager.Setup(um => um.FindByIdAsync("999")).ReturnsAsync((ApplicationUser?)null);
 
-            // Assert
-            Assert.Null(result);
-            _mockRepository.Verify(repo => repo.DeleteAsync("999"), Times.Once);
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _userService.DeleteUserAsync("999"));
+            _mockRepository.Verify(repo => repo.DeleteAsync("999"), Times.Never);
         }
 
         [Fact]

@@ -1,0 +1,29 @@
+﻿@page
+@model CommunityApp.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Is Manager?</th>
+                <th>Is Admin?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td><a asp-page="./Details" asp-route-UserId="@user.Id">@user.UserName</a></td>
+                    <td>@(user.IsManager ? "✔" : "")</td>
+                    <td>@(user.IsAdmin ? "✔" : "")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

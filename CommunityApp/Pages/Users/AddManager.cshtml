@@ -1,0 +1,22 @@
+﻿@page "/Users/{UserId}/AddManager"
+@model CommunityApp.Pages.Users.AddManagerModel
+@{
+    ViewData["Title"] = "Add a Manager";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <p><strong>@Model.UserDto!.UserName</strong></p>
+
+        <p class="text-danger">Are you sure you want to make this user a manager?</p>
+
+        <button type="submit" class="btn btn-success">Add Manager</button>
+
+        <a asp-page="./Details" asp-route-UserId="@Model.UserId" class="btn btn-secondary">Cancel</a>
+
+    </form>
+
+</section>

@@ -18,17 +18,27 @@
         }
     </ul>
 
+    <h3 class="h4">Managers</h3>
+
+    <ul>
+        @foreach (var manager in Model.Community!.Managers)
+        {
+            <li>@manager.UserName | <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id">Remove</a></li>
+        }
+    </ul>
+
     @if (Model.CanDelete)
     {
         <a asp-page="./Delete" asp-route-CommunityId="@Model.CommunityId" class="btn btn-danger mr-2">Delete</a>
     }
 
+    @if (Model.CanAddManagers)
+    {
+        <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-info mr-2">Add Manager</a>
+    }
+
     <a asp-page="./Edit" asp-route-CommunityId="@Model.CommunityId" class="btn btn-secondary mr-2">Edit</a>
 
     <a asp-page="./Index" class="btn btn-primary">Back to Communities</a>
-
-    <form method="post">
-        <button type="submit" class="btn btn-info">Add Manager</button>
-    </form>
 
 </section>

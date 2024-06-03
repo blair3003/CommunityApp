@@ -1,0 +1,20 @@
+﻿@page "/Communities/{CommunityId:int}/RemoveManager/{UserId}"
+@model CommunityApp.Pages.Communities.RemoveManagerModel
+@{
+    ViewData["Title"] = "Remove Manager";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <p class="text-danger">Are you sure you want to remove this manager from the community?</p>
+
+        <button type="submit" class="btn btn-danger">Remove</button>
+
+        <a asp-page="./Details" asp-route-CommunityId="@Model.CommunityId" class="btn btn-secondary">Cancel</a>
+
+    </form>
+
+</section>
