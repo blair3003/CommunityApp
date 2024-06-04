@@ -1,16 +1,21 @@
-using CommunityApp.Data.Models;
-using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using CommunityApp.Data.Models;
+using CommunityApp.Services;
 
 namespace CommunityApp.Pages.Communities
 {
     [Authorize("ManagerOnly")]
-    public class DetailsModel : PageModel
+    public class DetailsModel(
+        CommunityService communityService,
+        IAuthorizationService authorizationService,
+        ILogger<DetailsModel> logger
+        ) : PageModel
     {
-        private readonly CommunityService _communityService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly IAuthorizationService _authorizationService = authorizationService;
+        private readonly ILogger<DetailsModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
@@ -18,23 +23,18 @@ namespace CommunityApp.Pages.Communities
         public bool CanDelete { get; set; } = false;
         public bool CanAddManagers { get; set; } = false;
 
-        public DetailsModel(CommunityService communityService, IAuthorizationService authorizationService)
-        {
-            _communityService = communityService;
-            _authorizationService = authorizationService;
-        }
-
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 Community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
+                    ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, Community, "CommunityManager");
+
                 if (!authorizationResult.Succeeded)
                 {
-                    throw new InvalidOperationException("Access denied.");
+                    throw new InvalidOperationException("Manager not authorized.");
                 }
 
                 var isAdmin = await _authorizationService.AuthorizeAsync(User, "AdminOnly");
@@ -43,8 +43,10 @@ namespace CommunityApp.Pages.Communities
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Community {CommunityId}.", CommunityId);
+
                 return NotFound();
             }
         }

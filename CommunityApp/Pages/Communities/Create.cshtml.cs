@@ -1,23 +1,22 @@
-using CommunityApp.Data.Models;
-using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using CommunityApp.Data.Models;
+using CommunityApp.Services;
 
 namespace CommunityApp.Pages.Communities
 {
     [Authorize("AdminOnly")]
-    public class CreateModel : PageModel
+    public class CreateModel(
+        CommunityService communityService,
+        ILogger<CreateModel> logger
+        ) : PageModel
     {
-        private readonly CommunityService _communityService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly ILogger<CreateModel> _logger = logger;
 
         [BindProperty]
         public CreateCommunityInput Input { get; set; } = new CreateCommunityInput();
-
-        public CreateModel(CommunityService communityService)
-        {
-            _communityService = communityService;
-        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -33,14 +32,17 @@ namespace CommunityApp.Pages.Communities
                     {
                         Name = Input.Name
                     }
-                ) ?? throw new InvalidOperationException("Community creation failed.");
+                ) ?? throw new InvalidOperationException("AddCommunityAsync returned null.");
+
+                _logger.LogInformation("Created new Community {CommunityId}.", newCommunity.Id);
 
                 return RedirectToPage("./Details/", new { CommunityId = newCommunity.Id });
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Unable to create community.");
-                return Page();
+                _logger.LogError(ex, "Error creating Community.");
+
+                return RedirectToPage("/Error");
             }            
         }
     }

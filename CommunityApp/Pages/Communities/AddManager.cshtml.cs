@@ -1,28 +1,27 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
 
 namespace CommunityApp.Pages.Communities
 {
     [Authorize("AdminOnly")]
-    public class AddManagerModel : PageModel
+    public class AddManagerModel(
+        CommunityManagerService communityManagerService,
+        UserService userService,
+        ILogger<AddManagerModel> logger
+        ) : PageModel
     {
-        private readonly CommunityManagerService _communityManagerService;
-        private readonly UserService _userService;
+        private readonly CommunityManagerService _communityManagerService = communityManagerService;
+        private readonly UserService _userService = userService;
+        private readonly ILogger<AddManagerModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         [BindProperty] 
         public string? UserId { get; set; }
         public List<UserDto> Managers { get; set; } = [];
-
-        public AddManagerModel(CommunityManagerService communityManagerService, UserService userService)
-        {
-            _communityManagerService = communityManagerService;
-            _userService = userService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,9 +33,11 @@ namespace CommunityApp.Pages.Communities
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "Error retrieving Managers.");
+
+                return RedirectToPage("/Error");
             }
         }
 
@@ -50,17 +51,21 @@ namespace CommunityApp.Pages.Communities
             try
             {
                 var managerAdded = await _communityManagerService.AddManagerToCommunityAsync(UserId!, CommunityId);
+
                 if (!managerAdded)
                 {
-                    throw new InvalidOperationException("Manager add failed.");
+                    throw new InvalidOperationException("AddManagerToCommunityAsync returned false.");
                 }
 
-                return RedirectToPage("./Details/", new { CommunityId = CommunityId });
+                _logger.LogInformation("Added Manager {UserId} to Community {CommunityId}.", UserId, CommunityId);
+
+                return RedirectToPage("./Details/", new { CommunityId });
             }
             catch (Exception ex)
             {
-                //return RedirectToPage("/Error");
-                return BadRequest(UserId ?? "null");
+                _logger.LogError(ex, "Error adding Manager {UserId} to Community {CommunityId}.", UserId, CommunityId);
+
+                return RedirectToPage("/Error");
             }
         }
     }

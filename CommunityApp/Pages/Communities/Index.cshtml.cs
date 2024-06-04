@@ -1,29 +1,25 @@
 using CommunityApp.Data.Models;
-using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using CommunityApp.Services;
 
 namespace CommunityApp.Pages.Communities
 {
     [Authorize("ManagerOnly")]
-    public class IndexModel : PageModel
+    public class IndexModel(
+        CommunityService communityService,
+        CommunityManagerService communityManagerService,
+        IAuthorizationService authorizationService,
+        ILogger<IndexModel> logger
+        ) : PageModel
     {
-        private readonly CommunityService _communityService;
-        private readonly CommunityManagerService _communityManagerService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly CommunityManagerService _communityManagerService = communityManagerService;
+        private readonly IAuthorizationService _authorizationService = authorizationService;
+        private readonly ILogger<IndexModel> _logger = logger;
         public List<Community> Communities { get; set; } = [];
-
-        public IndexModel(
-            CommunityService communityService,
-            CommunityManagerService communityManagerService,
-            IAuthorizationService authorizationService)
-        {
-            _communityService = communityService;
-            _communityManagerService = communityManagerService;
-            _authorizationService = authorizationService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -42,8 +38,10 @@ namespace CommunityApp.Pages.Communities
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Communities.");
+
                 return RedirectToPage("/Error");
             }
         }

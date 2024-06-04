@@ -1,39 +1,40 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityApp.Pages.Communities
 {
     [Authorize("AdminOnly")]
-    public class DeleteModel : PageModel
+    public class DeleteModel(
+        CommunityService communityService,
+        ILogger<DeleteModel> logger
+        ) : PageModel
     {
-        private readonly CommunityService _communityService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly ILogger<DeleteModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         public Community? Community { get; set; }
         public bool CanDelete { get; set; } = false;
 
-        public DeleteModel(CommunityService communityService)
-        {
-            _communityService = communityService;
-        }
-
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 Community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
+                    ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 CanDelete = Community.Homes.Count == 0;
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Community {CommunityId}.", CommunityId);
+
                 return NotFound();
             }
         }
@@ -43,12 +44,16 @@ namespace CommunityApp.Pages.Communities
             try
             {
                 Community = await _communityService.DeleteCommunityAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community delete failed.");
+                    ?? throw new InvalidOperationException("DeleteCommunityAsync returned null.");
+
+                _logger.LogInformation("Deleted Community {CommunityId}.", CommunityId);
 
                 return RedirectToPage("./Index");
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting Community.");
+
                 return RedirectToPage("/Error");
             }
         }
