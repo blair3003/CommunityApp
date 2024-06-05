@@ -13,5 +13,7 @@ namespace CommunityApp.Data
 
         public DbSet<Community> Communities { get; set; }
         public DbSet<Home> Homes { get; set; }
+        public DbSet<Lease> Leases { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 }

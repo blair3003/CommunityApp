@@ -52,6 +52,7 @@ namespace CommunityApp.Data.Models
         public decimal BaseDeposit { get; set; }
 
         public Community? Community { get; set; }
+        public ICollection<Lease> Leases { get; set; } = [];
     }
 
     public enum Type { Apartment, House, Condo, Townhouse, Duplex }
