@@ -71,6 +71,22 @@ namespace CommunityApp.Tests.IntegrationTests.Fixtures
             }
         }
 
+        public async Task AddHomes()
+        {
+            var homes = new List<Home>
+            {
+                new() { Id = 1, CommunityId = 1, Number = "1" },
+                new() { Id = 2, CommunityId = 2, Number = "2" },
+                new() { Id = 3, CommunityId = 3, Number = " 3" }
+            };
+
+            using (var context = CreateContext())
+            {
+                context.Homes.AddRange(homes);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task AddUsers()
         {
             var users = new List<ApplicationUser>
@@ -83,6 +99,22 @@ namespace CommunityApp.Tests.IntegrationTests.Fixtures
             foreach (var user in users)
             {
                 await UserManager.CreateAsync(user);
+            }
+        }
+
+        public async Task AddLeases()
+        {
+            var leases = new List<Lease>
+            {
+                new() { Id = 1, HomeId = 1, TenantName = "Tenant 1", TenantEmail = "tenant1@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) },
+                new() { Id = 2, HomeId = 2, TenantName = "Tenant 2", TenantEmail = "tenant2@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) },
+                new() { Id = 3, HomeId = 3, TenantName = "Tenant 3", TenantEmail = "tenant3@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) }
+            };
+
+            using (var context = CreateContext())
+            {
+                context.Leases.AddRange(leases);
+                await context.SaveChangesAsync();
             }
         }
 
