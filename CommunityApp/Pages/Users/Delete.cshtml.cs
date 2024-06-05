@@ -7,30 +7,31 @@ using Microsoft.AspNetCore.Authorization;
 namespace CommunityApp.Pages.Users
 {
     [Authorize("AdminOnly")]
-    public class DeleteModel : PageModel
+    public class DeleteModel(
+        UserService userService,
+        ILogger<DeleteModel> logger
+        ) : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService _userService = userService;
+        private readonly ILogger<DeleteModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public string? UserId { get; set; }
         public UserDto? UserDto { get; set; }
-
-        public DeleteModel(UserService userService)
-        {
-            _userService = userService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 UserDto = await _userService.GetUserByIdAsync(UserId!)
-                    ?? throw new InvalidOperationException("User retrieval failed.");
+                    ?? throw new InvalidOperationException("GetUserByIdAsync returned null.");
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving User {UserId}.", UserId);
+
                 return NotFound();
             }
         }
@@ -40,12 +41,16 @@ namespace CommunityApp.Pages.Users
             try
             {
                 UserDto = await _userService.DeleteUserAsync(UserId!)
-                    ?? throw new InvalidOperationException("User delete failed.");
+                    ?? throw new InvalidOperationException("DeleteUserAsync returned null.");
+
+                _logger.LogInformation("Deleted User {UserId}.", UserId);
 
                 return RedirectToPage("./Index");
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding Manager {UserId}.", UserId);
+
                 return RedirectToPage("/Error");
             }
         }

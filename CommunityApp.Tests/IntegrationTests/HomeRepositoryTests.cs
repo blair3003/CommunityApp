@@ -11,7 +11,7 @@ namespace CommunityApp.Tests.IntegrationTests
         public HomeRepositoryTests(DatabaseFixture fixture)
         {
             _fixture = fixture;
-            AddCommunities().GetAwaiter().GetResult();
+            _fixture.AddCommunities().GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -217,22 +217,6 @@ namespace CommunityApp.Tests.IntegrationTests
                 {
                     throw new InvalidOperationException("Failed to clear data.");
                 }
-            }
-        }
-
-        private async Task AddCommunities()
-        {
-            var communities = new List<Community>
-            {
-                new() { Id = 1, Name = "Community 1" },
-                new() { Id = 2, Name = "Community 2" },
-                new() { Id = 3, Name = "Community 3" }
-            };
-
-            using (var context = _fixture.CreateContext())
-            {
-                context.Communities.AddRange(communities);
-                await context.SaveChangesAsync();
             }
         }
     }

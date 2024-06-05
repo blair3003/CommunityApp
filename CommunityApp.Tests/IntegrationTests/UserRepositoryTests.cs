@@ -1,7 +1,6 @@
-﻿using CommunityApp.Data.Models;
+﻿using System.Security.Claims;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Tests.IntegrationTests.Fixtures;
-using System.Security.Claims;
 
 namespace CommunityApp.Tests.IntegrationTests
 {
@@ -12,7 +11,7 @@ namespace CommunityApp.Tests.IntegrationTests
         public UserRepositoryTests(DatabaseFixture fixture)
         {
             _fixture = fixture;
-            AddUsers().GetAwaiter().GetResult();
+            _fixture.AddUsers().GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -154,21 +153,6 @@ namespace CommunityApp.Tests.IntegrationTests
             foreach (var user in users)
             {
                 await _fixture.UserManager.DeleteAsync(user);
-            }
-        }
-
-        private async Task AddUsers()
-        {
-            var users = new List<ApplicationUser>
-            {
-                new() { Id = "1", UserName = "TestUser1", Email = "test1@user.com" },
-                new() { Id = "2", UserName = "TestUser2", Email = "test2@user.com" },
-                new() { Id = "3", UserName = "TestUser3", Email = "test3@user.com" }
-            };
-
-            foreach (var user in users)
-            {
-                await _fixture.UserManager.CreateAsync(user);
             }
         }
     }

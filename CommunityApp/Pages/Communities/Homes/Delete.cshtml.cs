@@ -3,28 +3,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace CommunityApp.Pages.Communities.Homes
 {
     [Authorize("ManagerOnly")]
-    public class DeleteModel : PageModel
+    public class DeleteModel(
+        HomeService homeService,
+        CommunityService communityService,
+        IAuthorizationService authorizationService,
+        ILogger<DeleteModel> logger
+        ) : PageModel
     {
-        private readonly HomeService _homeService;
-        private readonly CommunityService _communityService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly HomeService _homeService = homeService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly IAuthorizationService _authorizationService = authorizationService;
+        private readonly ILogger<DeleteModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public int HomeId { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         public Home? Home { get; set; }
-
-        public DeleteModel(HomeService homeService, CommunityService communityService, IAuthorizationService authorizationService)
-        {
-            _homeService = homeService;
-            _communityService = communityService;
-            _authorizationService = authorizationService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -44,8 +44,10 @@ namespace CommunityApp.Pages.Communities.Homes
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Home {HomeId}.", HomeId);
+
                 return NotFound();
             }
         }
@@ -55,7 +57,7 @@ namespace CommunityApp.Pages.Communities.Homes
             try
             {
                 var community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
+                    ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
                 if (!authorizationResult.Succeeded)
@@ -64,12 +66,16 @@ namespace CommunityApp.Pages.Communities.Homes
                 }
 
                 Home = await _homeService.DeleteHomeAsync(HomeId)
-                    ?? throw new InvalidOperationException("Home delete failed.");
+                    ?? throw new InvalidOperationException("DeleteHomeAsync returned null.");
+
+                _logger.LogInformation("Deleted Home {HomeId}.", HomeId);
 
                 return RedirectToPage("../Details/", new { CommunityId });
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting Home.");
+
                 return RedirectToPage("/Error");
             }
         }

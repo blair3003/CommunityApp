@@ -55,6 +55,37 @@ namespace CommunityApp.Tests.IntegrationTests.Fixtures
             return new ApplicationDbContext(options);
         }
 
+        public async Task AddCommunities()
+        {
+            var communities = new List<Community>
+            {
+                new() { Id = 1, Name = "Community 1" },
+                new() { Id = 2, Name = "Community 2" },
+                new() { Id = 3, Name = "Community 3" }
+            };
+
+            using (var context = CreateContext())
+            {
+                context.Communities.AddRange(communities);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddUsers()
+        {
+            var users = new List<ApplicationUser>
+            {
+                new() { Id = "1", UserName = "TestUser1", Email = "test1@user.com" },
+                new() { Id = "2", UserName = "TestUser2", Email = "test2@user.com" },
+                new() { Id = "3", UserName = "TestUser3", Email = "test3@user.com" }
+            };
+
+            foreach (var user in users)
+            {
+                await UserManager.CreateAsync(user);
+            }
+        }
+
         public void Dispose()
         {
             _applicationDbContext.Database.EnsureDeleted();

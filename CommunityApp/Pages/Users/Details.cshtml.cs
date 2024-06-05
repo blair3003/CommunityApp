@@ -7,30 +7,31 @@ using Microsoft.AspNetCore.Authorization;
 namespace CommunityApp.Pages.Users
 {
     [Authorize("AdminOnly")]
-    public class DetailsModel : PageModel
+    public class DetailsModel(
+        UserService userService,
+        ILogger<DetailsModel> logger
+        ) : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService _userService = userService;
+        private readonly ILogger<DetailsModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public string? UserId { get; set; }
         public UserDto? UserDto { get; set; }
-
-        public DetailsModel(UserService userService)
-        {
-            _userService = userService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 UserDto = await _userService.GetUserByIdAsync(UserId!)
-                    ?? throw new InvalidOperationException("User retrieval failed.");
+                    ?? throw new InvalidOperationException("GetUserByIdAsync returned null.");
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving User {UserId}.", UserId);
+
                 return NotFound();
             }
         }

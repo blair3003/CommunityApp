@@ -7,30 +7,31 @@ using Microsoft.AspNetCore.Authorization;
 namespace CommunityApp.Pages.Users
 {
     [Authorize("AdminOnly")]
-    public class AddManagerModel : PageModel
+    public class AddManagerModel(
+        UserService userService,
+        ILogger<AddManagerModel> logger
+        ) : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService _userService = userService;
+        private readonly ILogger<AddManagerModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public string? UserId { get; set; }
         public UserDto? UserDto { get; set; }
-
-        public AddManagerModel(UserService userService)
-        {
-            _userService = userService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 UserDto = await _userService.GetUserByIdAsync(UserId!)
-                    ?? throw new InvalidOperationException("User retrieval failed.");
+                    ?? throw new InvalidOperationException("GetUserByIdAsync returned null.");
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving User {UserId}.", UserId);
+
                 return NotFound();
             }
         }
@@ -42,13 +43,17 @@ namespace CommunityApp.Pages.Users
                 var succeeded = await _userService.AddIsManagerClaimAsync(UserId!);
                 if (!succeeded)
                 {
-                    throw new InvalidOperationException("Add manager failed.");
+                    throw new InvalidOperationException("AddIsManagerClaimAsync returned false.");
                 }
 
-                return RedirectToPage("./Details/", new { UserId = UserId! });
+                _logger.LogInformation("Added Manager {UserId}.", UserId);
+
+                return RedirectToPage("./Details/", new { UserId });
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding Manager {UserId}.", UserId);
+
                 return RedirectToPage("/Error");
             }
         }

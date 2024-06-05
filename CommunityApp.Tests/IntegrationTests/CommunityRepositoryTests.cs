@@ -148,7 +148,7 @@ namespace CommunityApp.Tests.IntegrationTests
             using (var context = _fixture.CreateContext())
             {
                 var repository = new CommunityRepository(context);
-                var result = await repository.UpdateAsync(999, new Community { Id = 2, Name = "Community 2" });
+                var result = await repository.UpdateAsync(999, new Community { Id = 999, Name = "Community 2" });
                 Assert.Null(result);
             }
         }

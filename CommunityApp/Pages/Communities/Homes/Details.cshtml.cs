@@ -3,15 +3,22 @@ using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace CommunityApp.Pages.Communities.Homes
 {
     [Authorize("ManagerOnly")]
-    public class DetailsModel : PageModel
+    public class DetailsModel(
+        HomeService homeService,
+        CommunityService communityService,
+        IAuthorizationService authorizationService,
+        ILogger<DetailsModel> logger
+        ) : PageModel
     {
-        private readonly HomeService _homeService;
-        private readonly CommunityService _communityService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly HomeService _homeService = homeService;
+        private readonly CommunityService _communityService = communityService;
+        private readonly IAuthorizationService _authorizationService = authorizationService;
+        private readonly ILogger<DetailsModel> _logger = logger;
 
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
@@ -19,19 +26,12 @@ namespace CommunityApp.Pages.Communities.Homes
         public int HomeId { get; set; }
         public Home? Home { get; set; }
 
-        public DetailsModel(HomeService homeService, CommunityService communityService, IAuthorizationService authorizationService)
-        {
-            _homeService = homeService;
-            _communityService = communityService;
-            _authorizationService = authorizationService;
-        }
-
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 var community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
+                    ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
                 if (!authorizationResult.Succeeded)
@@ -40,17 +40,19 @@ namespace CommunityApp.Pages.Communities.Homes
                 }
 
                 Home = await _homeService.GetHomeByIdAsync(HomeId)
-                    ?? throw new InvalidOperationException("Home retrieval failed");
+                    ?? throw new InvalidOperationException("GetHomeByIdAsync returned null.");
 
                 if (Home.CommunityId != CommunityId)
                 {
-                    throw new InvalidOperationException("Home not part of community");
+                    throw new InvalidOperationException("Home not part of Community");
                 }
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Home {HomeId}.", HomeId);
+
                 return NotFound();
             }
         }

@@ -7,16 +7,15 @@ using CommunityApp.Services;
 namespace CommunityApp.Pages.Users
 {
     [Authorize("AdminOnly")]
-    public class IndexModel : PageModel
+    public class IndexModel(
+        UserService userService,
+        ILogger<IndexModel> logger
+        ) : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserService _userService = userService;
+        private readonly ILogger<IndexModel> _logger = logger;
 
         public List<UserDto> Users { get; set; } = [];
-
-        public IndexModel(UserService userService)
-        {
-            _userService = userService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -26,8 +25,10 @@ namespace CommunityApp.Pages.Users
 
                 return Page();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving Users.");
+
                 return NotFound();
             }
         }
