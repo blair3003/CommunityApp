@@ -1,5 +1,5 @@
-﻿@page "/Communities/{CommunityId:int}/Homes/{HomeId:int}/Delete"
-@model CommunityApp.Pages.Communities.Homes.DeleteModel
+﻿@page "/Homes/{HomeId:int}/Delete"
+@model CommunityApp.Pages.Homes.DeleteModel
 @{
     ViewData["Title"] = "Delete Home";
 }
@@ -13,7 +13,7 @@
 
         <button type="submit" class="btn btn-danger">Delete</button>
 
-        <a asp-page="./Details" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary">Cancel</a>
+        <a asp-page="./Details" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary">Cancel</a>
 
     </form>
 </section>

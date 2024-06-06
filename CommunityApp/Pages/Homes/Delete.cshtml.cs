@@ -1,11 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 
-namespace CommunityApp.Pages.Communities.Homes
+namespace CommunityApp.Pages.Homes
 {
     [Authorize("ManagerOnly")]
     public class DeleteModel(
@@ -22,25 +21,21 @@ namespace CommunityApp.Pages.Communities.Homes
 
         [BindProperty(SupportsGet = true)]
         public int HomeId { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public int CommunityId { get; set; }
         public Home? Home { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                var community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("Community retrieval failed.");
+                Home = await _homeService.GetHomeByIdAsync(HomeId)
+                    ?? throw new InvalidOperationException("Home retrieval failed.");
 
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, Home.Community, "CommunityManager");
+
                 if (!authorizationResult.Succeeded)
                 {
                     throw new InvalidOperationException("Access denied.");
                 }
-
-                Home = await _homeService.GetHomeByIdAsync(HomeId)
-                    ?? throw new InvalidOperationException("Home retrieval failed.");
 
                 return Page();
             }
@@ -56,21 +51,22 @@ namespace CommunityApp.Pages.Communities.Homes
         {
             try
             {
-                var community = await _communityService.GetCommunityByIdAsync(CommunityId)
-                    ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
+                Home = await _homeService.GetHomeByIdAsync(HomeId)
+                    ?? throw new InvalidOperationException("Home retrieval failed.");
 
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, Home.Community, "CommunityManager");
+
                 if (!authorizationResult.Succeeded)
                 {
                     throw new InvalidOperationException("Access denied.");
                 }
 
-                Home = await _homeService.DeleteHomeAsync(HomeId)
+                var deletedHome = await _homeService.DeleteHomeAsync(HomeId)
                     ?? throw new InvalidOperationException("DeleteHomeAsync returned null.");
 
                 _logger.LogInformation("Deleted Home {HomeId}.", HomeId);
 
-                return RedirectToPage("../Details/", new { CommunityId });
+                return RedirectToPage("/Communities/Details/", new { deletedHome.CommunityId });
             }
             catch (Exception ex)
             {

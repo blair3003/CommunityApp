@@ -1,5 +1,5 @@
-﻿@page "/Communities/{CommunityId:int}/Homes/{HomeId:int}"
-@model CommunityApp.Pages.Communities.Homes.DetailsModel
+﻿@page "/Homes/{HomeId:int}"
+@model CommunityApp.Pages.Homes.DetailsModel
 @{
     ViewData["Title"] = "Home Details";
 }
@@ -97,10 +97,10 @@
         </div>
     </div>
 
-    <a asp-page="./Delete" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@Model.HomeId" class="btn btn-danger">Delete</a>
+    <a asp-page="./Delete" asp-route-HomeId="@Model.HomeId" class="btn btn-danger">Delete</a>
 
-    <a asp-page="./Edit" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary ml-2">Edit</a>
+    <a asp-page="./Edit" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary ml-2">Edit</a>
 
-    <a asp-page="/Communities/Details" asp-route-CommunityId="@Model.CommunityId" class="btn btn-primary ml-2">Back to Community</a>
+    <a asp-page="/Communities/Details" asp-route-CommunityId="@Model.Home!.CommunityId" class="btn btn-primary ml-2">View Community</a>
 
 </section>

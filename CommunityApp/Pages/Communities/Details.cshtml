@@ -7,14 +7,14 @@
 <section class="container mt-4">
     <h1 class="h3">@ViewData["Title"]</h1>
 
-    <a asp-page="./Homes/Create" asp-route-CommunityId="@Model.CommunityId">Create Home</a>
+    <a asp-page="/Homes/Create" asp-route-CommunityId="@Model.CommunityId">Create Home</a>
 
     <h3 class="h4">Homes</h3>
 
     <ul>
         @foreach(var home in Model.Community!.Homes)
         {
-            <li><a asp-page="./Homes/Details" asp-route-CommunityId="@Model.CommunityId" asp-route-HomeId="@home.Id">@home.Id</a></li>
+            <li><a asp-page="/Homes/Details" asp-route-HomeId="@home.Id">@home.Id</a></li>
         }
     </ul>
 

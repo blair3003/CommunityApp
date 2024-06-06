@@ -1,11 +1,10 @@
-using CommunityApp.Data.Models;
-using CommunityApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using CommunityApp.Data.Models;
+using CommunityApp.Services;
 
-namespace CommunityApp.Pages.Communities.Homes
+namespace CommunityApp.Pages.Homes
 {
     [Authorize("ManagerOnly")]
     public class CreateModel(
@@ -32,12 +31,20 @@ namespace CommunityApp.Pages.Communities.Homes
                 return Page();
             }
 
+            if (CommunityId <= 0)
+            {
+                ModelState.AddModelError(string.Empty, "CommunityId is required.");
+
+                return Page();
+            }
+
             try
             {
                 var community = await _communityService.GetCommunityByIdAsync(CommunityId)
                     ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var authorizationResult = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
+
                 if (!authorizationResult.Succeeded)
                 {
                     throw new InvalidOperationException("Access denied.");

@@ -1,6 +1,6 @@
-﻿@page "/Communities/{CommunityId:int}/Homes/Create"
+﻿@page "/Homes/Create"
 @using global::CommunityApp.Data.Models
-@model CommunityApp.Pages.Communities.Homes.CreateModel
+@model CommunityApp.Pages.Homes.CreateModel
 @{
     ViewData["Title"] = "Create Home";
 }
@@ -44,13 +44,13 @@
             <input asp-for="Input.Country" class="form-control" />
             <span asp-validation-for="Input.Country" class="text-danger"></span>
         </div>
-        <!--<div class="form-group">
+        <div class="form-group">
             <label asp-for="Input.Type"></label>
-            <select asp-for="Input.Type" class="form-control" asp-items="Html.GetEnumSelectList<Type>()">
+            <select asp-for="Input.Type" class="form-control" asp-items="Html.GetEnumSelectList<CommunityApp.Data.Models.Type>()">
                 <option value="">Select</option>
             </select>
             <span asp-validation-for="Input.Type" class="text-danger"></span>
-        </div>-->
+        </div>
         <div class="form-group">
             <label asp-for="Input.Bedrooms"></label>
             <input asp-for="Input.Bedrooms" class="form-control" />

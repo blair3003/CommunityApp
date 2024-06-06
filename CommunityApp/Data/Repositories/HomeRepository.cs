@@ -20,6 +20,7 @@ namespace CommunityApp.Data.Repositories
         {
             var home = await _context.Homes
                 .Include(h => h.Community)
+                    .ThenInclude(c => c!.Managers)
                 .FirstOrDefaultAsync(h => h.Id == id);
             return home;
         }
