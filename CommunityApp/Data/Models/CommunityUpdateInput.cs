@@ -2,7 +2,7 @@
 
 namespace CommunityApp.Data.Models
 {
-    public class CreateCommunityInput
+    public class CommunityUpdateInput
     {
         [Required]
         [StringLength(100, ErrorMessage = "Maximum length is {1}")]

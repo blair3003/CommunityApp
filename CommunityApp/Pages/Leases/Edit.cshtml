@@ -1,0 +1,73 @@
+@page "/Leases/{LeaseId:int}/Edit"
+@model CommunityApp.Pages.Leases.EditModel
+@{
+    ViewData["Title"] = "Update Lease";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <div class="form-group">
+            <label asp-for="Input.TenantName"></label>
+            <input asp-for="Input.TenantName" class="form-control" />
+            <span asp-validation-for="Input.TenantName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.TenantEmail"></label>
+            <input asp-for="Input.TenantEmail" class="form-control" />
+            <span asp-validation-for="Input.TenantEmail" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.TenantPhone"></label>
+            <input asp-for="Input.TenantPhone" class="form-control" />
+            <span asp-validation-for="Input.TenantPhone" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.MonthlyPayment"></label>
+            <input asp-for="Input.MonthlyPayment" class="form-control" />
+            <span asp-validation-for="Input.MonthlyPayment" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.DepositAmount"></label>
+            <input asp-for="Input.DepositAmount" class="form-control" />
+            <span asp-validation-for="Input.DepositAmount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.PaymentDueDay"></label>
+            <input asp-for="Input.PaymentDueDay" class="form-control" />
+            <span asp-validation-for="Input.PaymentDueDay" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.LeaseStartDate"></label>
+            <input asp-for="Input.LeaseStartDate" class="form-control" />
+            <span asp-validation-for="Input.LeaseStartDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.LeaseEndDate"></label>
+            <input asp-for="Input.LeaseEndDate" class="form-control" />
+            <span asp-validation-for="Input.LeaseEndDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Notes"></label>
+            <input asp-for="Input.Notes" class="form-control" />
+            <span asp-validation-for="Input.Notes" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

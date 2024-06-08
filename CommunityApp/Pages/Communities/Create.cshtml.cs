@@ -16,7 +16,7 @@ namespace CommunityApp.Pages.Communities
         private readonly ILogger<CreateModel> _logger = logger;
 
         [BindProperty]
-        public CreateCommunityInput Input { get; set; } = new CreateCommunityInput();
+        public CommunityCreateInput Input { get; set; } = new CommunityCreateInput();
 
         public async Task<IActionResult> OnPostAsync()
         {

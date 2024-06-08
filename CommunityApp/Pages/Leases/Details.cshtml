@@ -1,0 +1,131 @@
+﻿@page "/Leases/{LeaseId:int}"
+@model CommunityApp.Pages.Leases.DetailsModel
+
+@{
+    ViewData["Title"] = "Lease Details";
+}
+
+<section class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <div class="card mt-4">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="leaseDetailsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="lease-info-tab" data-bs-toggle="tab" href="#lease-info" role="tab" aria-controls="lease-info" aria-selected="true">Lease Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="tenant-info-tab" data-bs-toggle="tab" href="#tenant-info" role="tab" aria-controls="tenant-info" aria-selected="false">Tenant Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="home-info-tab" data-bs-toggle="tab" href="#home-info" role="tab" aria-controls="home-info" aria-selected="false">Home Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="payments-tab" data-bs-toggle="tab" href="#payments" role="tab" aria-controls="payments" aria-selected="false">Payments</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="leaseDetailsTabContent">
+                <section class="tab-pane fade show active" id="lease-info" role="tabpanel" aria-labelledby="lease-info-tab">
+                    <h4 class="visually-hidden">Lease info</h4>
+                    <dl class="row">
+                        <dt class="col-sm-3">Monthly Payment</dt>
+                        <dd class="col-sm-9">@Model.Lease!.MonthlyPayment.ToString("C")</dd>
+
+                        <dt class="col-sm-3">Deposit Amount</dt>
+                        <dd class="col-sm-9">@Model.Lease.DepositAmount?.ToString("C")</dd>
+
+                        <dt class="col-sm-3">Payment Due Day</dt>
+                        <dd class="col-sm-9">@Model.Lease.PaymentDueDay</dd>
+
+                        <dt class="col-sm-3">Lease Start Date</dt>
+                        <dd class="col-sm-9">@Model.Lease.LeaseStartDate.ToString("MMM d, yyyy")</dd>
+
+                        <dt class="col-sm-3">Lease End Date</dt>
+                        <dd class="col-sm-9">@Model.Lease.LeaseEndDate.ToString("MMM d, yyyy")</dd>
+
+                        <dt class="col-sm-3">Notes</dt>
+                        <dd class="col-sm-9">@Model.Lease.Notes</dd>
+                    </dl>
+                </section>
+                <section class="tab-pane fade" id="tenant-info" role="tabpanel" aria-labelledby="tenant-info-tab">
+                    <h4 class="visually-hidden">Tenant info</h4>
+                    <dl class="row">
+                        <dt class="col-sm-3">Name</dt>
+                        <dd class="col-sm-9">@Model.Lease.TenantName</dd>
+
+                        <dt class="col-sm-3">Email</dt>
+                        <dd class="col-sm-9">@Model.Lease.TenantEmail</dd>
+
+                        <dt class="col-sm-3">Phone</dt>
+                        <dd class="col-sm-9">@Model.Lease.TenantPhone</dd>
+                    </dl>
+                </section>
+                <section class="tab-pane fade" id="home-info" role="tabpanel" aria-labelledby="home-info-tab">
+                    <h4 class="visually-hidden">Home info</h4>
+                    @if (Model.CanManageLease)
+                    {
+                        <a asp-page="/Homes/Details" asp-route-HomeId="@Model.Lease.HomeId" class="btn btn-info mb-3">View full details</a>
+                    }
+                    <dl class="row">
+                        <dt class="col-sm-3">Address</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.Number @Model.Lease.Home?.Street, @Model.Lease.Home?.City, @Model.Lease.Home?.State, @Model.Lease.Home?.Zip, @Model.Lease.Home?.Country</dd>
+
+                        <dt class="col-sm-3">Type</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.Type</dd>
+
+                        <dt class="col-sm-3">Parking</dt>
+                        <dd class="col-sm-9">@(Model.Lease.Home!.HasParking ? "✔" : "❌")</dd>
+
+                        <dt class="col-sm-3">Parking Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.ParkingDetails</dd>
+
+                        <dt class="col-sm-3">Security Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.SecurityDetails</dd>
+
+                        <dt class="col-sm-3">Utilities Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.UtilitiesDetails</dd>
+
+                        <dt class="col-sm-3">Accessibility Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.AccessibilityDetails</dd>
+
+                        <dt class="col-sm-3">Pet Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.PetDetails</dd>
+
+                        <dt class="col-sm-3">Other Details</dt>
+                        <dd class="col-sm-9">@Model.Lease.Home?.OtherDetails</dd>
+                    </dl>
+                </section>
+                <section class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                    <h4 class="visually-hidden">Payments info</h4>
+                    <a asp-page="/Payments/Create" asp-route-LeaseId="@Model.LeaseId" class="btn btn-info mb-3">Make a Payment</a>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var payment in Model.Lease.Payments)
+                            {
+                                <tr>
+                                    <td><a asp-page="/Payments/Details" asp-route-PaymentId="@payment.Id">@payment.PaymentDate.ToString("MMM d, yyyy")</a></td>
+                                    <td>@payment.Amount.ToString("C")</td>
+                                    <td>@payment.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            @if (Model.CanManageLease)
+            {
+                <div class="mt-3">
+                    <a asp-page="./Edit" asp-route-LeaseId="@Model.LeaseId" class="btn btn-warning">Edit Lease</a>
+                    <a asp-page="./Delete" asp-route-LeaseId="@Model.LeaseId" class="btn btn-danger">Delete Lease</a>
+                    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

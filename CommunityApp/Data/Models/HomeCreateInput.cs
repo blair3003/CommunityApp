@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommunityApp.Data.Models
 {
-    public class CreateHomeInput
+    public class HomeCreateInput
     {
         [Required]
         public int CommunityId { get; set; }

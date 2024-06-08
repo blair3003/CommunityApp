@@ -18,7 +18,7 @@ namespace CommunityApp.Pages.Communities
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         [BindProperty]
-        public UpdateCommunityInput Input { get; set; } = new UpdateCommunityInput();
+        public CommunityUpdateInput Input { get; set; } = new CommunityUpdateInput();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -27,7 +27,7 @@ namespace CommunityApp.Pages.Communities
                 var community = await _communityService.GetCommunityByIdAsync(CommunityId)
                     ?? throw new InvalidOperationException("Community retrieval failed.");
 
-                Input = new UpdateCommunityInput { Name = community.Name };
+                Input = new CommunityUpdateInput { Name = community.Name };
 
                 return Page();
             }

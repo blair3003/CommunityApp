@@ -5,102 +5,131 @@
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="homeDetailsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="home-info-tab" data-bs-toggle="tab" href="#home-info" role="tab" aria-controls="home-info" aria-selected="true">Home Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="leases-tab" data-bs-toggle="tab" href="#leases" role="tab" aria-controls="leases" aria-selected="false">Lease History</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="community-info-tab" data-bs-toggle="tab" href="#community-info" role="tab" aria-controls="community-info" aria-selected="false">Community Info</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="homeDetailsTabContent">
+                <section class="tab-pane fade show active" id="home-info" role="tabpanel" aria-labelledby="home-info-tab">
+                    <h3 class="visually-hidden">Home info</h3>
+                    <dl class="row">
+                        <dt class="col-sm-3">Floor</dt>
+                        <dd class="col-sm-9">@Model.Home!.Floor</dd>
 
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="row">
-                <dt class="col-sm-4">Floor:</dt>
-                <dd class="col-sm-8">@Model.Home!.Floor</dd>
+                        <dt class="col-sm-3">Street Number</dt>
+                        <dd class="col-sm-9">@Model.Home.Number</dd>
 
-                <dt class="col-sm-4">Number:</dt>
-                <dd class="col-sm-8">@Model.Home!.Number</dd>
+                        <dt class="col-sm-3">Street</dt>
+                        <dd class="col-sm-9">@Model.Home.Street</dd>
 
-                <dt class="col-sm-4">Street:</dt>
-                <dd class="col-sm-8">@Model.Home!.Street</dd>
+                        <dt class="col-sm-3">City</dt>
+                        <dd class="col-sm-9">@Model.Home.City</dd>
 
-                <dt class="col-sm-4">City:</dt>
-                <dd class="col-sm-8">@Model.Home!.City</dd>
+                        <dt class="col-sm-3">State</dt>
+                        <dd class="col-sm-9">@Model.Home.State</dd>
 
-                <dt class="col-sm-4">State:</dt>
-                <dd class="col-sm-8">@Model.Home!.State</dd>
+                        <dt class="col-sm-3">Zip Code</dt>
+                        <dd class="col-sm-9">@Model.Home.Zip</dd>
 
-                <dt class="col-sm-4">Zip:</dt>
-                <dd class="col-sm-8">@Model.Home!.Zip</dd>
+                        <dt class="col-sm-3">Country</dt>
+                        <dd class="col-sm-9">@Model.Home.Country</dd>
 
-                <dt class="col-sm-4">Country:</dt>
-                <dd class="col-sm-8">@Model.Home!.Country</dd>
-            </dl>
-        </div>
-        <div class="col-md-6">
-            <dl class="row">
-                <dt class="col-sm-4">Type:</dt>
-                <dd class="col-sm-8">@Model.Home!.Type</dd>
+                        <dt class="col-sm-3">Type</dt>
+                        <dd class="col-sm-9">@Model.Home.Type</dd>
 
-                <dt class="col-sm-4">Bedrooms:</dt>
-                <dd class="col-sm-8">@Model.Home!.Bedrooms</dd>
+                        <dt class="col-sm-3">Bedrooms</dt>
+                        <dd class="col-sm-9">@Model.Home.Bedrooms</dd>
 
-                <dt class="col-sm-4">Bathrooms:</dt>
-                <dd class="col-sm-8">@Model.Home!.Bathrooms</dd>
+                        <dt class="col-sm-3">Bathrooms</dt>
+                        <dd class="col-sm-9">@Model.Home.Bathrooms</dd>
 
-                <dt class="col-sm-4">Square Footage:</dt>
-                <dd class="col-sm-8">@Model.Home!.SqFt</dd>
+                        <dt class="col-sm-3">Square Footage</dt>
+                        <dd class="col-sm-9">@Model.Home.SqFt</dd>
 
-                <dt class="col-sm-4">Year Built:</dt>
-                <dd class="col-sm-8">@Model.Home!.YearBuilt</dd>
+                        <dt class="col-sm-3">Year Built</dt>
+                        <dd class="col-sm-9">@Model.Home.YearBuilt</dd>
 
-                <dt class="col-sm-4">Year Renovated:</dt>
-                <dd class="col-sm-8">@Model.Home!.YearRenovated</dd>
+                        <dt class="col-sm-3">Year Renovated</dt>
+                        <dd class="col-sm-9">@Model.Home.YearRenovated</dd>
 
-                <dt class="col-sm-4">Is Furnished:</dt>
-                <dd class="col-sm-8">@Model.Home!.IsFurnished</dd>
+                        <dt class="col-sm-3">Furnished</dt>
+                        <dd class="col-sm-9">@(Model.Home.IsFurnished ? "✔" : "❌")</dd>
 
-                <dt class="col-sm-4">Has Parking:</dt>
-                <dd class="col-sm-8">@Model.Home!.HasParking</dd>
+                        <dt class="col-sm-3">Has Parking</dt>
+                        <dd class="col-sm-9">@(Model.Home.HasParking ? "✔" : "❌")</dd>
 
-                <dt class="col-sm-4">Parking Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.ParkingDetails</dd>
+                        <dt class="col-sm-3">Parking Details</dt>
+                        <dd class="col-sm-9">@Model.Home.ParkingDetails</dd>
 
-                <dt class="col-sm-4">Security Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.SecurityDetails</dd>
+                        <dt class="col-sm-3">Security Details</dt>
+                        <dd class="col-sm-9">@Model.Home.SecurityDetails</dd>
 
-                <dt class="col-sm-4">Utilities Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.UtilitiesDetails</dd>
+                        <dt class="col-sm-3">Utilities Details</dt>
+                        <dd class="col-sm-9">@Model.Home.UtilitiesDetails</dd>
 
-                <dt class="col-sm-4">Accessibility Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.AccessibilityDetails</dd>
+                        <dt class="col-sm-3">Accessibility Details</dt>
+                        <dd class="col-sm-9">@Model.Home.AccessibilityDetails</dd>
 
-                <dt class="col-sm-4">Pet Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.PetDetails</dd>
+                        <dt class="col-sm-3">Pet Details</dt>
+                        <dd class="col-sm-9">@Model.Home.PetDetails</dd>
 
-                <dt class="col-sm-4">Other Details:</dt>
-                <dd class="col-sm-8">@Model.Home!.OtherDetails</dd>
+                        <dt class="col-sm-3">Other Details</dt>
+                        <dd class="col-sm-9">@Model.Home.OtherDetails</dd>
+                    </dl>
+                </section>
 
-                <dt class="col-sm-4">Laundry:</dt>
-                <dd class="col-sm-8">@Model.Home!.Laundry</dd>
+                <section class="tab-pane fade" id="leases" role="tabpanel" aria-labelledby="leases-tab">
+                    <h3 class="visually-hidden">Lease history</h3>
+                    <a asp-page="/Leases/Create" asp-route-HomeId="@Model.HomeId" class="btn btn-info mb-3">Add new Lease</a>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>Monthly Payment</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Is Active?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lease in Model.Home.Leases)
+                            {
+                                <tr>
+                                    <td><a asp-page="/Leases/Details" asp-route-LeaseId="@lease.Id">@lease.TenantName</a></td>
+                                    <td>@lease.MonthlyPayment.ToString("C")</td>
+                                    <td>@lease.LeaseStartDate.ToString("MMM d, yyyy")</td>
+                                    <td>@lease.LeaseEndDate.ToString("MMM d, yyyy")</td>
+                                    <td>@(lease.IsActive ? "✔" : "❌")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
 
-                <dt class="col-sm-4">Heating:</dt>
-                <dd class="col-sm-8">@Model.Home!.Heating</dd>
+                <section class="tab-pane fade" id="community-info" role="tabpanel" aria-labelledby="community-info-tab">
+                    <h3 class="visually-hidden">Community info</h3>
+                    <dl class="row">
+                        <dt class="col-sm-1">Name</dt>
+                        <dd class="col-sm-11"><a asp-page="/Communities/Details" asp-route-CommunityId="@Model.Home.CommunityId">@Model.Home.Community?.Name</a></dd>
+                    </dl>
+                </section>
+            </div>
 
-                <dt class="col-sm-4">Cooling:</dt>
-                <dd class="col-sm-8">@Model.Home!.Cooling</dd>
-
-                <dt class="col-sm-4">Outdoor Space:</dt>
-                <dd class="col-sm-8">@Model.Home!.OutdoorSpace</dd>
-
-                <dt class="col-sm-4">Base Rent:</dt>
-                <dd class="col-sm-8">@Model.Home!.BaseRent</dd>
-
-                <dt class="col-sm-4">Base Deposit:</dt>
-                <dd class="col-sm-8">@Model.Home!.BaseDeposit</dd>
-            </dl>
+            <div class="mt-3">
+                <a asp-page="/Homes/Edit" asp-route-HomeId="@Model.HomeId" class="btn btn-warning">Edit Home</a>
+                <a asp-page="/Homes/Delete" asp-route-HomeId="@Model.HomeId" class="btn btn-danger">Delete Home</a>
+                <a asp-page="/Homes/Index" class="btn btn-secondary">All Homes</a>
+            </div>            
         </div>
     </div>
-
-    <a asp-page="./Delete" asp-route-HomeId="@Model.HomeId" class="btn btn-danger">Delete</a>
-
-    <a asp-page="./Edit" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary ml-2">Edit</a>
-
-    <a asp-page="/Communities/Details" asp-route-CommunityId="@Model.Home!.CommunityId" class="btn btn-primary ml-2">View Community</a>
-
 </section>

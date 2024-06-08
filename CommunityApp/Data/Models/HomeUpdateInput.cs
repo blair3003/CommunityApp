@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommunityApp.Data.Models
 {
-    public class UpdateHomeInput
+    public class HomeUpdateInput
     {
         [Range(0, 100)]
         public int Floor { get; set; }

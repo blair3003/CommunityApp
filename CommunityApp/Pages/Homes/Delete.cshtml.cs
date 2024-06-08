@@ -66,7 +66,7 @@ namespace CommunityApp.Pages.Homes
 
                 _logger.LogInformation("Deleted Home {HomeId}.", HomeId);
 
-                return RedirectToPage("/Communities/Details/", new { deletedHome.CommunityId });
+                return RedirectToPage("/Communities/Details", new { deletedHome.CommunityId });
             }
             catch (Exception ex)
             {

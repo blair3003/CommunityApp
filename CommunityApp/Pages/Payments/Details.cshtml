@@ -1,0 +1,28 @@
+@page "/Payments/{PaymentId:int}"
+@model CommunityApp.Pages.Payments.DetailsModel
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <dl class="row">
+        <dt class="col-sm-2">Amount:</dt>
+        <dd class="col-sm-10">@Model.Payment!.Amount</dd>
+
+        <dt class="col-sm-2">Payment Date:</dt>
+        <dd class="col-sm-10">@Model.Payment!.PaymentDate</dd>
+
+        <dt class="col-sm-2">Description:</dt>
+        <dd class="col-sm-10">@Model.Payment!.Description</dd>
+    </dl>
+
+    <a asp-page="./Delete" asp-route-PaymentId="@Model.PaymentId" class="btn btn-danger">Delete</a>
+
+    <a asp-page="./Edit" asp-route-PaymentId="@Model.PaymentId" class="btn btn-secondary ml-2">Edit</a>
+
+    <a asp-page="/Leases/Details" asp-route-LeaseId="@Model.Payment!.LeaseId" class="btn btn-primary ml-2">View Lease</a>
+
+</section>

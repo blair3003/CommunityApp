@@ -22,7 +22,7 @@ namespace CommunityApp.Pages.Homes
         [BindProperty(SupportsGet = true)]
         public int CommunityId { get; set; }
         [BindProperty]
-        public CreateHomeInput Input { get; set; } = new CreateHomeInput();
+        public HomeCreateInput Input { get; set; } = new HomeCreateInput();
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -86,7 +86,7 @@ namespace CommunityApp.Pages.Homes
 
                 _logger.LogInformation("Created new Home {HomeId}.", newHome.Id);
 
-                return RedirectToPage("./Details/", new { CommunityId, HomeId = newHome.Id });
+                return RedirectToPage("./Details/", new { HomeId = newHome.Id });
             }
             catch (Exception ex)
             {

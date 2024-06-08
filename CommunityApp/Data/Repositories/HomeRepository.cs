@@ -21,6 +21,7 @@ namespace CommunityApp.Data.Repositories
             var home = await _context.Homes
                 .Include(h => h.Community)
                     .ThenInclude(c => c!.Managers)
+                .Include(h => h.Leases)
                 .FirstOrDefaultAsync(h => h.Id == id);
             return home;
         }

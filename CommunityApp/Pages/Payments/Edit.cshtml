@@ -1,0 +1,37 @@
+@page "/Payments/{PaymentId:int}/Edit"
+@model CommunityApp.Pages.Payments.EditModel
+@{
+    ViewData["Title"] = "Edit Payment";
+}
+
+<section class="container mt-4">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+
+    <form method="post">
+
+        <div class="form-group">
+            <label asp-for="Input.Amount"></label>
+            <input asp-for="Input.Amount" class="form-control" />
+            <span asp-validation-for="Input.Amount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.PaymentDate"></label>
+            <input asp-for="Input.PaymentDate" class="form-control" />
+            <span asp-validation-for="Input.PaymentDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Description"></label>
+            <input asp-for="Input.Description" class="form-control" />
+            <span asp-validation-for="Input.Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

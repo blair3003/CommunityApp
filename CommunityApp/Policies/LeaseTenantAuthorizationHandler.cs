@@ -1,22 +1,22 @@
-﻿using CommunityApp.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using CommunityApp.Data.Models;
 
 namespace CommunityApp.Policies
 {
-    public class CommunityManagerAuthorizationHandler : AuthorizationHandler<CommunityManagerRequirement, Community>
+    public class LeaseTenantAuthorizationHandler : AuthorizationHandler<LeaseTenantRequirement, Lease>
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
-            CommunityManagerRequirement requirement,
-            Community community)
+            LeaseTenantRequirement requirement,
+            Lease lease)
         {
             if (context.User.HasClaim(c => c.Type == "IsAdmin" && c.Value == "true"))
             {
                 context.Succeed(requirement);
             }
 
-            if (community.Managers.Any(manager => manager.Id == context.User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            if (lease.Tenant?.Id == context.User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 context.Succeed(requirement);
             }

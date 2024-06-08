@@ -20,7 +20,7 @@ namespace CommunityApp.Pages.Homes
         [BindProperty(SupportsGet = true)]
         public int HomeId { get; set; }
         [BindProperty]
-        public UpdateHomeInput Input { get; set; } = new UpdateHomeInput();
+        public HomeUpdateInput Input { get; set; } = new HomeUpdateInput();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -36,7 +36,7 @@ namespace CommunityApp.Pages.Homes
                     throw new InvalidOperationException("Access denied.");
                 }
 
-                Input = new UpdateHomeInput
+                Input = new HomeUpdateInput
                 {
                     Floor = home.Floor,
                     Number = home.Number,

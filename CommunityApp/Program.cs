@@ -26,17 +26,23 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdmin", "true"));
     options.AddPolicy("ManagerOnly", policy => policy.RequireClaim("IsManager", "true"));
     options.AddPolicy("CommunityManager", policy => policy.Requirements.Add(new CommunityManagerRequirement()));
+    options.AddPolicy("LeaseTenant", policy => policy.Requirements.Add(new LeaseTenantRequirement()));
 });
 
 builder.Services.AddSingleton<IAuthorizationHandler, CommunityManagerAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, LeaseTenantAuthorizationHandler>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 builder.Services.AddScoped<ICommunityManagerRepository, CommunityManagerRepository>();
 builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ILeaseRepository, LeaseRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<CommunityService>();
 builder.Services.AddScoped<CommunityManagerService>();
 builder.Services.AddScoped<HomeService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<LeaseService>();
+builder.Services.AddScoped<PaymentService>();
 
 builder.Services.AddRazorPages();
 
