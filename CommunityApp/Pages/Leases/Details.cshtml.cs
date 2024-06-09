@@ -22,16 +22,17 @@ namespace CommunityApp.Pages.Leases
 		public int LeaseId { get; set; }
 		public Lease? Lease { get; set; }
 
+		public bool CanMakePayment { get; set; } = false;
 		public bool CanManageLease { get; set; } = false;
 
-		public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
 		{
 			try
 			{
 				Lease = await _leaseService.GetLeaseByIdAsync(LeaseId)
 					?? throw new InvalidOperationException("GetLeaseByIdAsync returned null.");
 
-				var community = await _communityService.GetCommunityByIdAsync(Lease.Home.CommunityId)
+				var community = await _communityService.GetCommunityByIdAsync(Lease.Home!.CommunityId)
 					?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
 				var tenantAuthorization = await _authorizationService.AuthorizeAsync(User, Lease, "LeaseTenant");
@@ -42,6 +43,7 @@ namespace CommunityApp.Pages.Leases
                     throw new InvalidOperationException("Not authorized.");
                 }
 
+                CanMakePayment = tenantAuthorization.Succeeded;
                 CanManageLease = managerAuthorization.Succeeded;
 
                 return Page();

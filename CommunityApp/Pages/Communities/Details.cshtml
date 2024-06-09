@@ -1,44 +1,104 @@
 ﻿@page "/Communities/{CommunityId:int}"
 @model CommunityApp.Pages.Communities.DetailsModel
 @{
-    ViewData["Title"] = $"{Model.Community!.Name}";
+    ViewData["Title"] = "Community Details";
 }
 
 <section class="container mt-4">
-    <h1 class="h3">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="communityDetailsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="community-info-tab" data-bs-toggle="tab" href="#community-info" role="tab" aria-controls="community-info" aria-selected="true">Community Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="homes-tab" data-bs-toggle="tab" href="#homes" role="tab" aria-controls="homes" aria-selected="false">Homes</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="managers-tab" data-bs-toggle="tab" href="#managers" role="tab" aria-controls="managers" aria-selected="false">Managers</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="communityDetailsTabContent">
+                <section class="tab-pane fade show active" id="community-info" role="tabpanel" aria-labelledby="community-info-tab">
+                    <h3 class="visually-hidden">Community info</h3>
+                    <dl class="row">
+                        <dt class="col-sm-1">Name</dt>
+                        <dd class="col-sm-11">@Model.Community!.Name</dd>
+                    </dl>
+                </section>
 
-    <a asp-page="/Homes/Create" asp-route-CommunityId="@Model.CommunityId">Create Home</a>
+                <section class="tab-pane fade" id="homes" role="tabpanel" aria-labelledby="homes-tab">
+                    <h3 class="visually-hidden">Homes</h3>
+                    <a asp-page="/Homes/Create" asp-route-CommunityId="@Model.Community.Id" class="btn btn-info mb-3">Add new Home</a>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Address</th>
+                                <th>Zip</th>
+                                <th>Type</th>
+                                <th>Bedrooms</th>
+                                <th>Base Rent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var home in Model.Community.Homes)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-page="/Homes/Details" asp-route-HomeId="@home.Id">
+                                                @home.Number @home.Street, @home.City, @home.State
+                                        </a>
+                                    </td>
+                                    <td>@home.Zip</td>
+                                    <td>@home.Type</td>
+                                    <td>@home.Bedrooms</td>
+                                    <td>@home.BaseRent.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
 
-    <h3 class="h4">Homes</h3>
+                <section class="tab-pane fade" id="managers" role="tabpanel" aria-labelledby="managers-tab">
+                    <h3 class="visually-hidden">Managers</h3>
+                    @if (Model.CanManageManagers)
+                    {
+                        <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-info mb-3">Add new Manager</a>
+                    }
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var manager in Model.Community.Managers)
+                            {
+                                <tr>
+                                    <td>@manager.Email</td>
+                                    <td>
+                                        @if (Model.CanManageManagers)
+                                        {
+                                            <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id" aria-label="Remove Manager" class="text-decoration-none">❌</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
 
-    <ul>
-        @foreach(var home in Model.Community!.Homes)
-        {
-            <li><a asp-page="/Homes/Details" asp-route-HomeId="@home.Id">@home.Id</a></li>
-        }
-    </ul>
-
-    <h3 class="h4">Managers</h3>
-
-    <ul>
-        @foreach (var manager in Model.Community!.Managers)
-        {
-            <li>@manager.UserName | <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id">Remove</a></li>
-        }
-    </ul>
-
-    @if (Model.CanDelete)
-    {
-        <a asp-page="./Delete" asp-route-CommunityId="@Model.CommunityId" class="btn btn-danger mr-2">Delete</a>
-    }
-
-    @if (Model.CanAddManagers)
-    {
-        <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-info mr-2">Add Manager</a>
-    }
-
-    <a asp-page="./Edit" asp-route-CommunityId="@Model.CommunityId" class="btn btn-secondary mr-2">Edit</a>
-
-    <a asp-page="./Index" class="btn btn-primary">Back to Communities</a>
-
+            <div class="mt-3">
+                <a asp-page="/Communities/Edit" asp-route-CommunityId="@Model.Community.Id" class="btn btn-warning">Edit</a>
+                @if (Model.CanDelete)
+                {
+                    <a asp-page="/Communities/Delete" asp-route-CommunityId="@Model.Community.Id" class="btn btn-danger">Delete</a>
+                }
+                <a asp-page="/Communities/Index" class="btn btn-secondary">All Communities</a>
+            </div>
+        </div>
+    </div>
 </section>

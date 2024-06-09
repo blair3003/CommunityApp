@@ -1,28 +1,63 @@
 @page "/Payments/{PaymentId:int}"
 @model CommunityApp.Pages.Payments.DetailsModel
-
 @{
     ViewData["Title"] = "Payment Details";
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="paymentDetailsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="payment-info-tab" data-bs-toggle="tab" href="#payment-info" role="tab" aria-controls="payment-info" aria-selected="true">Payment Info</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="lease-info-tab" data-bs-toggle="tab" href="#lease-info" role="tab" aria-controls="lease-info" aria-selected="false">Lease Info</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="paymentDetailsTabContent">
+                <section class="tab-pane fade show active" id="payment-info" role="tabpanel" aria-labelledby="payment-info-tab">
+                    <h3 class="visually-hidden">Payment info</h3>
+                    <dl class="row">
+                        <dt class="col-sm-3">Amount</dt>
+                        <dd class="col-sm-9">@Model.Payment!.Amount.ToString("C")</dd>
 
-    <dl class="row">
-        <dt class="col-sm-2">Amount:</dt>
-        <dd class="col-sm-10">@Model.Payment!.Amount</dd>
+                        <dt class="col-sm-3">Payment Date</dt>
+                        <dd class="col-sm-9">@Model.Payment.PaymentDate.ToString("MMM d, yyyy")</dd>
 
-        <dt class="col-sm-2">Payment Date:</dt>
-        <dd class="col-sm-10">@Model.Payment!.PaymentDate</dd>
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">@Model.Payment.Description</dd>
+                    </dl>
+                </section>
 
-        <dt class="col-sm-2">Description:</dt>
-        <dd class="col-sm-10">@Model.Payment!.Description</dd>
-    </dl>
+                <section class="tab-pane fade" id="lease-info" role="tabpanel" aria-labelledby="lease-info-tab">
+                    <h3 class="visually-hidden">Lease info</h3>
+                    <a asp-page="/Leases/Details" asp-route-LeaseId="@Model.Payment.LeaseId" class="btn btn-info">View full details</a>
+                    <dl class="row">
+                        <dt class="col-sm-3">Tenant</dt>
+                        <dd class="col-sm-9">@Model.Payment.Lease?.TenantName</dd>
 
-    <a asp-page="./Delete" asp-route-PaymentId="@Model.PaymentId" class="btn btn-danger">Delete</a>
+                        <dt class="col-sm-3">Monthly Payment</dt>
+                        <dd class="col-sm-9">@Model.Payment.Lease?.MonthlyPayment.ToString("C")</dd>
 
-    <a asp-page="./Edit" asp-route-PaymentId="@Model.PaymentId" class="btn btn-secondary ml-2">Edit</a>
+                        <dt class="col-sm-3">Start Date</dt>
+                        <dd class="col-sm-9">@Model.Payment.Lease?.LeaseStartDate.ToString("MMM d, yyyy")</dd>
 
-    <a asp-page="/Leases/Details" asp-route-LeaseId="@Model.Payment!.LeaseId" class="btn btn-primary ml-2">View Lease</a>
+                        <dt class="col-sm-3">End Date</dt>
+                        <dd class="col-sm-9">@Model.Payment.Lease?.LeaseEndDate.ToString("MMM d, yyyy")</dd>
+                    </dl>                    
+                </section>
+            </div>
 
+            @if (Model.CanManagePayment)
+            {
+                <div class="mt-3">
+                    <a asp-page="/Payments/Edit" asp-route-PaymentId="@Model.PaymentId" class="btn btn-warning">Edit</a>
+                    <a asp-page="/Payments/Delete" asp-route-PaymentId="@Model.PaymentId" class="btn btn-danger">Delete</a>
+                    <a asp-page="/Payments/Index" class="btn btn-secondary">All Payments</a>
+                </div>
+            }
+        </div>
+    </div>
 </section>
