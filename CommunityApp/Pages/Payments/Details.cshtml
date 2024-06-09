@@ -33,7 +33,7 @@
 
                 <section class="tab-pane fade" id="lease-info" role="tabpanel" aria-labelledby="lease-info-tab">
                     <h3 class="visually-hidden">Lease info</h3>
-                    <a asp-page="/Leases/Details" asp-route-LeaseId="@Model.Payment.LeaseId" class="btn btn-info">View full details</a>
+                    <a asp-page="/Leases/Details" asp-route-LeaseId="@Model.Payment.LeaseId" class="btn btn-info mb-3">View full details</a>
                     <dl class="row">
                         <dt class="col-sm-3">Tenant</dt>
                         <dd class="col-sm-9">@Model.Payment.Lease?.TenantName</dd>

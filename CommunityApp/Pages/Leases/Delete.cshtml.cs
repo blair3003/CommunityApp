@@ -30,7 +30,7 @@ namespace CommunityApp.Pages.Leases
                 Lease = await _leaseService.GetLeaseByIdAsync(LeaseId)
                     ?? throw new InvalidOperationException("GetLeaseByIdAsync returned null.");
 
-                var community = await _communityService.GetCommunityByIdAsync(Lease.Home.CommunityId)
+                var community = await _communityService.GetCommunityByIdAsync(Lease.Home!.CommunityId)
                     ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var managerAuthorization = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");
@@ -57,7 +57,7 @@ namespace CommunityApp.Pages.Leases
                 Lease = await _leaseService.GetLeaseByIdAsync(LeaseId)
                     ?? throw new InvalidOperationException("GetLeaseByIdAsync returned null.");
 
-                var community = await _communityService.GetCommunityByIdAsync(Lease.Home.CommunityId)
+                var community = await _communityService.GetCommunityByIdAsync(Lease.Home!.CommunityId)
                     ?? throw new InvalidOperationException("GetCommunityByIdAsync returned null.");
 
                 var managerAuthorization = await _authorizationService.AuthorizeAsync(User, community, "CommunityManager");

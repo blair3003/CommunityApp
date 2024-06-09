@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommunityApp.Data.Models;
 using CommunityApp.Services;
+using Humanizer.Localisation;
 
 namespace CommunityApp.Pages.Leases
 {
@@ -23,6 +24,26 @@ namespace CommunityApp.Pages.Leases
         public int HomeId { get; set; }
         [BindProperty]
         public LeaseCreateInput Input { get; set; } = new LeaseCreateInput();
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                var home = await _homeService.GetHomeByIdAsync(HomeId)
+                    ?? throw new InvalidOperationException("GetHomeByIdAsync returned null.");
+
+                Input.MonthlyPayment = home.BaseRent;
+                Input.DepositAmount = home.BaseDeposit;
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving Home {HomeId}.", HomeId);
+
+                return NotFound();
+            }
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {

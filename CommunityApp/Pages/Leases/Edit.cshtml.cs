@@ -86,9 +86,9 @@ namespace CommunityApp.Pages.Leases
                     throw new InvalidOperationException("Not authorized.");
                 }
 
-                lease.TenantName = Input.TenantName;
-                lease.TenantEmail = Input.TenantEmail;
-                lease.TenantPhone = Input.TenantPhone;
+                lease.TenantName = Input.TenantName!;
+                lease.TenantEmail = Input.TenantEmail!;
+                lease.TenantPhone = Input.TenantPhone!;
                 lease.MonthlyPayment = Input.MonthlyPayment;
                 lease.DepositAmount = Input.DepositAmount;
                 lease.PaymentDueDay = Input.PaymentDueDay;

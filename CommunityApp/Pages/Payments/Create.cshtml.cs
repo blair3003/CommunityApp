@@ -23,6 +23,25 @@ namespace CommunityApp.Pages.Payments
         [BindProperty]
         public PaymentCreateInput Input { get; set; } = new PaymentCreateInput();
 
+        public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                var lease = await _leaseService.GetLeaseByIdAsync(LeaseId)
+                    ?? throw new InvalidOperationException("GetLeaseByIdAsync returned null.");
+
+                Input.Amount = lease.MonthlyPayment;
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving Lease {LeaseId}.", LeaseId);
+
+                return NotFound();
+            }
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
