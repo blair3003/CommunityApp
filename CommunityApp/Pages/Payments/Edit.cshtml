@@ -5,31 +5,34 @@
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
 
-    <form method="post">
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="Input.Amount" class="form-label"></label>
+                    <input asp-for="Input.Amount" class="form-control" />
+                    <span asp-validation-for="Input.Amount" class="text-danger"></span>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Input.Amount"></label>
-            <input asp-for="Input.Amount" class="form-control" />
-            <span asp-validation-for="Input.Amount" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="Input.PaymentDate" class="form-label"></label>
+                    <input asp-for="Input.PaymentDate" class="form-control" type="date" />
+                    <span asp-validation-for="Input.PaymentDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Description" class="form-label"></label>
+                    <textarea asp-for="Input.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a asp-page="./Details" asp-route-PaymentId="@Model.PaymentId" class="btn btn-secondary">Cancel</a>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label asp-for="Input.PaymentDate"></label>
-            <input asp-for="Input.PaymentDate" class="form-control" />
-            <span asp-validation-for="Input.PaymentDate" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Input.Description"></label>
-            <input asp-for="Input.Description" class="form-control" />
-            <span asp-validation-for="Input.Description" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
-
-    </form>
+    </div>
 </section>
 
 @section Scripts {

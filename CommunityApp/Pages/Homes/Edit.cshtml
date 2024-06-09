@@ -6,157 +6,162 @@
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
 
-    <form method="post">
-        <div class="form-group">
-            <label asp-for="Input.Floor"></label>
-            <input asp-for="Input.Floor" class="form-control" />
-            <span asp-validation-for="Input.Floor" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Number"></label>
-            <input asp-for="Input.Number" class="form-control" />
-            <span asp-validation-for="Input.Number" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Street"></label>
-            <input asp-for="Input.Street" class="form-control" />
-            <span asp-validation-for="Input.Street" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.City"></label>
-            <input asp-for="Input.City" class="form-control" />
-            <span asp-validation-for="Input.City" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.State"></label>
-            <input asp-for="Input.State" class="form-control" />
-            <span asp-validation-for="Input.State" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Zip"></label>
-            <input asp-for="Input.Zip" class="form-control" />
-            <span asp-validation-for="Input.Zip" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Country"></label>
-            <input asp-for="Input.Country" class="form-control" />
-            <span asp-validation-for="Input.Country" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Type"></label>
-            <select asp-for="Input.Type" class="form-control" asp-items="Html.GetEnumSelectList<CommunityApp.Data.Models.Type>()">
-                <option value="">Select</option>
-            </select>
-            <span asp-validation-for="Input.Type" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Bedrooms"></label>
-            <input asp-for="Input.Bedrooms" class="form-control" />
-            <span asp-validation-for="Input.Bedrooms" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Bathrooms"></label>
-            <input asp-for="Input.Bathrooms" class="form-control" />
-            <span asp-validation-for="Input.Bathrooms" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.SqFt"></label>
-            <input asp-for="Input.SqFt" class="form-control" />
-            <span asp-validation-for="Input.SqFt" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.YearBuilt"></label>
-            <input asp-for="Input.YearBuilt" class="form-control" />
-            <span asp-validation-for="Input.YearBuilt" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.YearRenovated"></label>
-            <input asp-for="Input.YearRenovated" class="form-control" />
-            <span asp-validation-for="Input.YearRenovated" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.IsFurnished"></label>
-            <input asp-for="Input.IsFurnished" class="form-control" />
-            <span asp-validation-for="Input.IsFurnished" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.HasParking"></label>
-            <input asp-for="Input.HasParking" class="form-control" />
-            <span asp-validation-for="Input.HasParking" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.ParkingDetails"></label>
-            <input asp-for="Input.ParkingDetails" class="form-control" />
-            <span asp-validation-for="Input.ParkingDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.SecurityDetails"></label>
-            <input asp-for="Input.SecurityDetails" class="form-control" />
-            <span asp-validation-for="Input.SecurityDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.UtilitiesDetails"></label>
-            <input asp-for="Input.UtilitiesDetails" class="form-control" />
-            <span asp-validation-for="Input.UtilitiesDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.AccessibilityDetails"></label>
-            <input asp-for="Input.AccessibilityDetails" class="form-control" />
-            <span asp-validation-for="Input.AccessibilityDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.PetDetails"></label>
-            <input asp-for="Input.PetDetails" class="form-control" />
-            <span asp-validation-for="Input.PetDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.OtherDetails"></label>
-            <input asp-for="Input.OtherDetails" class="form-control" />
-            <span asp-validation-for="Input.OtherDetails" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Laundry"></label>
-            <select asp-for="Input.Laundry" class="form-control" asp-items="Html.GetEnumSelectList<Laundry>()">
-                <option value="">Select</option>
-            </select>
-            <span asp-validation-for="Input.Laundry" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Heating"></label>
-            <select asp-for="Input.Heating" class="form-control" asp-items="Html.GetEnumSelectList<Heating>()">
-                <option value="">Select</option>
-            </select>
-            <span asp-validation-for="Input.Heating" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Cooling"></label>
-            <select asp-for="Input.Cooling" class="form-control" asp-items="Html.GetEnumSelectList<Cooling>()">
-                <option value="">Select</option>
-            </select>
-            <span asp-validation-for="Input.Cooling" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.OutdoorSpace"></label>
-            <select asp-for="Input.OutdoorSpace" class="form-control" asp-items="Html.GetEnumSelectList<OutdoorSpace>()">
-                <option value="">Select</option>
-            </select>
-            <span asp-validation-for="Input.OutdoorSpace" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.BaseRent"></label>
-            <input asp-for="Input.BaseRent" class="form-control" />
-            <span asp-validation-for="Input.BaseRent" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.BaseDeposit"></label>
-            <input asp-for="Input.BaseDeposit" class="form-control" />
-            <span asp-validation-for="Input.BaseDeposit" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Input.Floor"></label>
+                    <input asp-for="Input.Floor" class="form-control" />
+                    <span asp-validation-for="Input.Floor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Number"></label>
+                    <input asp-for="Input.Number" class="form-control" />
+                    <span asp-validation-for="Input.Number" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Street"></label>
+                    <input asp-for="Input.Street" class="form-control" />
+                    <span asp-validation-for="Input.Street" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.City"></label>
+                    <input asp-for="Input.City" class="form-control" />
+                    <span asp-validation-for="Input.City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.State"></label>
+                    <input asp-for="Input.State" class="form-control" />
+                    <span asp-validation-for="Input.State" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Zip"></label>
+                    <input asp-for="Input.Zip" class="form-control" />
+                    <span asp-validation-for="Input.Zip" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Country"></label>
+                    <input asp-for="Input.Country" class="form-control" />
+                    <span asp-validation-for="Input.Country" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Type"></label>
+                    <select asp-for="Input.Type" class="form-control" asp-items="Html.GetEnumSelectList<CommunityApp.Data.Models.Type>()">
+                        <option value="">Select</option>
+                    </select>
+                    <span asp-validation-for="Input.Type" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Bedrooms"></label>
+                    <input asp-for="Input.Bedrooms" class="form-control" />
+                    <span asp-validation-for="Input.Bedrooms" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Bathrooms"></label>
+                    <input asp-for="Input.Bathrooms" class="form-control" />
+                    <span asp-validation-for="Input.Bathrooms" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.SqFt"></label>
+                    <input asp-for="Input.SqFt" class="form-control" />
+                    <span asp-validation-for="Input.SqFt" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.YearBuilt"></label>
+                    <input asp-for="Input.YearBuilt" class="form-control" />
+                    <span asp-validation-for="Input.YearBuilt" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.YearRenovated"></label>
+                    <input asp-for="Input.YearRenovated" class="form-control" />
+                    <span asp-validation-for="Input.YearRenovated" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.IsFurnished"></label>
+                    <input asp-for="Input.IsFurnished" class="form-control" />
+                    <span asp-validation-for="Input.IsFurnished" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.HasParking"></label>
+                    <input asp-for="Input.HasParking" class="form-control" />
+                    <span asp-validation-for="Input.HasParking" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.ParkingDetails"></label>
+                    <input asp-for="Input.ParkingDetails" class="form-control" />
+                    <span asp-validation-for="Input.ParkingDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.SecurityDetails"></label>
+                    <input asp-for="Input.SecurityDetails" class="form-control" />
+                    <span asp-validation-for="Input.SecurityDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.UtilitiesDetails"></label>
+                    <input asp-for="Input.UtilitiesDetails" class="form-control" />
+                    <span asp-validation-for="Input.UtilitiesDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.AccessibilityDetails"></label>
+                    <input asp-for="Input.AccessibilityDetails" class="form-control" />
+                    <span asp-validation-for="Input.AccessibilityDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.PetDetails"></label>
+                    <input asp-for="Input.PetDetails" class="form-control" />
+                    <span asp-validation-for="Input.PetDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.OtherDetails"></label>
+                    <input asp-for="Input.OtherDetails" class="form-control" />
+                    <span asp-validation-for="Input.OtherDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Laundry"></label>
+                    <select asp-for="Input.Laundry" class="form-control" asp-items="Html.GetEnumSelectList<Laundry>()">
+                        <option value="">Select</option>
+                    </select>
+                    <span asp-validation-for="Input.Laundry" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Heating"></label>
+                    <select asp-for="Input.Heating" class="form-control" asp-items="Html.GetEnumSelectList<Heating>()">
+                        <option value="">Select</option>
+                    </select>
+                    <span asp-validation-for="Input.Heating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Cooling"></label>
+                    <select asp-for="Input.Cooling" class="form-control" asp-items="Html.GetEnumSelectList<Cooling>()">
+                        <option value="">Select</option>
+                    </select>
+                    <span asp-validation-for="Input.Cooling" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.OutdoorSpace"></label>
+                    <select asp-for="Input.OutdoorSpace" class="form-control" asp-items="Html.GetEnumSelectList<OutdoorSpace>()">
+                        <option value="">Select</option>
+                    </select>
+                    <span asp-validation-for="Input.OutdoorSpace" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.BaseRent"></label>
+                    <input asp-for="Input.BaseRent" class="form-control" />
+                    <span asp-validation-for="Input.BaseRent" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.BaseDeposit"></label>
+                    <input asp-for="Input.BaseDeposit" class="form-control" />
+                    <span asp-validation-for="Input.BaseDeposit" class="text-danger"></span>
+                </div>
 
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a asp-page="./Details" asp-route-HomeId="@Model.HomeId" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
 </section>
 
 @section Scripts {
