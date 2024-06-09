@@ -1,7 +1,7 @@
 @page "/Payments/{PaymentId:int}"
 @model CommunityApp.Pages.Payments.DetailsModel
 @{
-    ViewData["Title"] = "Payment Details";
+    ViewData["Title"] = $"Payment #{Model.PaymentId} Details";
 }
 
 <section class="container mt-4">

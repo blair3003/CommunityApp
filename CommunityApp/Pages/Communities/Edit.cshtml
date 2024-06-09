@@ -1,7 +1,7 @@
 ﻿@page "/Communities/{CommunityId:int}/Edit"
 @model CommunityApp.Pages.Communities.EditModel
 @{
-    ViewData["Title"] = "Update Community";
+    ViewData["Title"] = $"Update Community #{Model.CommunityId}";
 }
 
 <section class="container mt-4">

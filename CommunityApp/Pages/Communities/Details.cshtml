@@ -1,7 +1,7 @@
 ﻿@page "/Communities/{CommunityId:int}"
 @model CommunityApp.Pages.Communities.DetailsModel
 @{
-    ViewData["Title"] = "Community Details";
+    ViewData["Title"] = $"Community #{Model.CommunityId} Details";
 }
 
 <section class="container mt-4">

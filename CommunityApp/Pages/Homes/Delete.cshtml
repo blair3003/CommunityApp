@@ -1,7 +1,7 @@
 ﻿@page "/Homes/{HomeId:int}/Delete"
 @model CommunityApp.Pages.Homes.DeleteModel
 @{
-    ViewData["Title"] = "Delete Home";
+    ViewData["Title"] = $"Delete Home #{Model.HomeId}";
 }
 
 <section class="container mt-4">
@@ -9,7 +9,7 @@
 
     <form method="post">
 
-        <p class="text-danger">Are you sure you want to delete this home?</p>
+        <p class="text-danger">Are you sure you want to delete this Home?</p>
 
         <button type="submit" class="btn btn-danger">Delete</button>
 
