@@ -74,6 +74,60 @@ namespace CommunityApp.Tests.UnitTests
         }
 
         [Fact]
+        public async Task GetLeasesByManagerIdAsync_ReturnsLeasesForManager()
+        {
+            // Arrange
+            var leases = new List<Lease>
+            {
+                new() { Id = 1, HomeId = 1, TenantName = "Tenant 1", TenantEmail = "tenant1@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) },
+                new() { Id = 2, HomeId = 2, TenantName = "Tenant 2", TenantEmail = "tenant2@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) },
+                new() { Id = 3, HomeId = 3, TenantName = "Tenant 3", TenantEmail = "tenant3@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) }
+            };
+
+            _mockRepository
+                .Setup(repo => repo.GetLeasesByManagerIdAsync("1"))
+                .ReturnsAsync(leases);
+
+            // Act
+            var result = await _communityManagerService.GetLeasesByManagerIdAsync("1");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Count);
+            Assert.Contains(result, l => l.TenantName == "Tenant 1");
+            Assert.Contains(result, l => l.TenantName == "Tenant 2");
+            Assert.Contains(result, l => l.TenantName == "Tenant 3");
+            _mockRepository.Verify(repo => repo.GetLeasesByManagerIdAsync("1"), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetPaymentsByManagerIdAsync_ReturnsPaymentsForManager()
+        {
+            // Arrange
+            var payments = new List<Payment>
+            {
+                new() { Id = 1, LeaseId = 1, Amount = 100.00m, PaymentDate = new DateTime(2023, 1, 1) },
+                new() { Id = 2, LeaseId = 2, Amount = 150.00m, PaymentDate = new DateTime(2023, 1, 1) },
+                new() { Id = 3, LeaseId = 3, Amount = 200.00m, PaymentDate = new DateTime(2023, 1, 1) }
+            };
+
+            _mockRepository
+                .Setup(repo => repo.GetPaymentsByManagerIdAsync("1"))
+                .ReturnsAsync(payments);
+
+            // Act
+            var result = await _communityManagerService.GetPaymentsByManagerIdAsync("1");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Count);
+            Assert.Contains(result, p => p.Amount == 100.00m);
+            Assert.Contains(result, p => p.Amount == 150.00m);
+            Assert.Contains(result, p => p.Amount == 200.00m);
+            _mockRepository.Verify(repo => repo.GetPaymentsByManagerIdAsync("1"), Times.Once);
+        }
+
+        [Fact]
         public async Task AddManagerToCommunityAsync_AddsManager()
         {
             // Arrange            

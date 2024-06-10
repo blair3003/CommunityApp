@@ -12,6 +12,8 @@ namespace CommunityApp.Data.Repositories
         {
             var payments = await _context.Payments
                 .Include(p => p.Lease)
+                    .ThenInclude(l => l!.Home)
+                        .ThenInclude(h => h!.Community)
                 .ToListAsync();
 
             return payments;

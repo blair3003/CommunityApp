@@ -21,6 +21,18 @@ namespace CommunityApp.Services
             return managerHomes;
         }
 
+        public async Task<List<Lease>> GetLeasesByManagerIdAsync(string managerId)
+        {
+            var managerLeases = await _repository.GetLeasesByManagerIdAsync(managerId);
+            return managerLeases;
+        }
+
+        public async Task<List<Payment>> GetPaymentsByManagerIdAsync(string managerId)
+        {
+            var managerPayments = await _repository.GetPaymentsByManagerIdAsync(managerId);
+            return managerPayments;
+        }
+
         public async Task<bool> AddManagerToCommunityAsync(string managerId, int communityId)
         {
             try

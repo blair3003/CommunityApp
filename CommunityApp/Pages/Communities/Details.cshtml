@@ -62,7 +62,7 @@
 
                 <section class="tab-pane fade" id="managers" role="tabpanel" aria-labelledby="managers-tab">
                     <h3 class="visually-hidden">Managers</h3>
-                    @if (Model.CanManageManagers)
+                    @if (Model.CanManageCommunity)
                     {
                         <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-info mb-3">Add new Manager</a>
                     }
@@ -79,7 +79,7 @@
                                 <tr>
                                     <td>@manager.Email</td>
                                     <td>
-                                        @if (Model.CanManageManagers)
+                                        @if (Model.CanManageCommunity)
                                         {
                                             <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id" aria-label="Remove Manager" class="text-decoration-none">❌</a>
                                         }
@@ -92,10 +92,14 @@
             </div>
 
             <div class="mt-3">
-                <a asp-page="/Communities/Edit" asp-route-CommunityId="@Model.Community.Id" class="btn btn-warning">Edit</a>
-                @if (Model.CanDelete)
+                @if (Model.CanManageCommunity)
                 {
-                    <a asp-page="/Communities/Delete" asp-route-CommunityId="@Model.Community.Id" class="btn btn-danger">Delete</a>
+                    <a asp-page="/Communities/Edit" asp-route-CommunityId="@Model.Community.Id" class="btn btn-warning">Edit</a>
+
+                    @if (Model.CanDelete)
+                    {
+                        <a asp-page="/Communities/Delete" asp-route-CommunityId="@Model.Community.Id" class="btn btn-danger">Delete</a>
+                    }
                 }
                 <a asp-page="/Communities/Index" class="btn btn-secondary">All Communities</a>
             </div>

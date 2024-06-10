@@ -35,7 +35,7 @@
                             <td>@home.BaseRent.ToString("C")</td>
                             <td>
                                 <a asp-page="/Communities/Details" asp-route-CommunityId="@home.CommunityId">
-                                    @home.Community.Name
+                                    @home.Community?.Name
                                 </a>
                             </td>
                         </tr>

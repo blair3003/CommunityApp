@@ -48,10 +48,9 @@ namespace CommunityApp.Tests.IntegrationTests
             using (var context = _fixture.CreateContext())
             {
                 context.Users.Add(manager);
-                context.Homes.Add(home);
                 community.Managers.Add(manager);
-                community.Homes.Add(home);
                 context.Communities.Add(community);
+                context.Homes.Add(home);
                 await context.SaveChangesAsync();
             }
 
@@ -62,6 +61,64 @@ namespace CommunityApp.Tests.IntegrationTests
                 Assert.NotNull(result);
                 Assert.Single(result);
                 Assert.Contains(result, c => c.Number == "1");
+            }
+        }
+
+        [Fact]
+        public async Task GetLeasesByManagerIdAsync_ReturnsLeasesForManager()
+        {
+            var manager = new ApplicationUser { Id = "1", UserName = "TestUser", Email = "test@user.com" };
+            var community = new Community { Id = 1, Name = "Community 1" };
+            var home = new Home { Id = 1, CommunityId = 1, Number = "1" };
+            var lease = new Lease { Id = 1, HomeId = 1, TenantName = "Tenant 1", TenantEmail = "tenant1@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Users.Add(manager);
+                community.Managers.Add(manager);
+                context.Communities.Add(community);
+                context.Homes.Add(home);
+                context.Leases.Add(lease);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityManagerRepository(context);
+                var result = await repository.GetLeasesByManagerIdAsync("1");
+                Assert.NotNull(result);
+                Assert.Single(result);
+                Assert.Contains(result, l => l.TenantName == "Tenant 1");
+            }
+        }
+
+        [Fact]
+        public async Task GetPaymentsByManagerIdAsync_ReturnsPaymentsForManager()
+        {
+            var manager = new ApplicationUser { Id = "1", UserName = "TestUser", Email = "test@user.com" };
+            var community = new Community { Id = 1, Name = "Community 1" };
+            var home = new Home { Id = 1, CommunityId = 1, Number = "1" };
+            var lease = new Lease { Id = 1, HomeId = 1, TenantName = "Tenant 1", TenantEmail = "tenant1@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) };
+            var payment = new Payment { Id = 1, LeaseId = 1, Amount = 100.00m, PaymentDate = new DateTime(2023, 1, 1) };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Users.Add(manager);
+                community.Managers.Add(manager);
+                context.Communities.Add(community);
+                context.Homes.Add(home);
+                context.Leases.Add(lease);
+                context.Payments.Add(payment);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new CommunityManagerRepository(context);
+                var result = await repository.GetPaymentsByManagerIdAsync("1");
+                Assert.NotNull(result);
+                Assert.Single(result);
+                Assert.Contains(result, p => p.Amount == 100.00m);
             }
         }
 

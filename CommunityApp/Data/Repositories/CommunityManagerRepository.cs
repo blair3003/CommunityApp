@@ -31,6 +31,35 @@ namespace CommunityApp.Data.Repositories
             return managerHomes;
         }
 
+        public async Task<List<Lease>> GetLeasesByManagerIdAsync(string managerId)
+        {
+            var managerLeases = await _context.Leases
+                .Include(l => l.Home)
+                    .ThenInclude(h => h!.Community)
+                        .ThenInclude(c => c!.Managers)
+                .Where(
+                    l => l.Home!.Community!.Managers.Any(
+                        m => m.Id == managerId))
+                .ToListAsync();
+
+            return managerLeases;
+        }
+
+        public async Task<List<Payment>> GetPaymentsByManagerIdAsync(string managerId)
+        {
+            var managerPayments = await _context.Payments
+                .Include(p => p.Lease)
+                    .ThenInclude(l => l!.Home)
+                        .ThenInclude(l => l!.Community)
+                            .ThenInclude(c => c!.Managers)
+                .Where(
+                    p => p.Lease!.Home!.Community!.Managers.Any(
+                        m => m.Id == managerId))
+                .ToListAsync();
+
+            return managerPayments;
+        }
+
         public async Task<bool> AddManagerToCommunityAsync(string managerId, int communityId)
         {
             var manager = await _context.Users.FindAsync(managerId);

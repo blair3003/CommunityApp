@@ -1,4 +1,46 @@
-@page
+﻿@page
 @model CommunityApp.Pages.Leases.IndexModel
 @{
+    ViewData["Title"] = Model.CanManageAllLeases ? "All Leases" : "My Leases";
 }
+
+<section class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tenant</th>
+                        <th>Monthly Payment</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Is Active?</th>
+                        <th>Community</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lease in Model.Leases)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="/Leases/Details" asp-route-LeaseId="@lease.Id">@lease.TenantName</a>
+                            </td>
+                            <td>@lease.MonthlyPayment.ToString("C")</td>
+                            <td>@lease.LeaseStartDate.ToString("MMM d, yyyy")</td>
+                            <td>@lease.LeaseEndDate.ToString("MMM d, yyyy")</td>
+                            <td>@(lease.IsActive ? "✔" : "❌")</td>
+                            <td>
+                                <a asp-page="/Communities/Details" asp-route-CommunityId="@lease.Home!.CommunityId">
+                                    @lease.Home?.Community?.Name
+                                </a>                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>

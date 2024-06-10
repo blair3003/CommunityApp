@@ -21,7 +21,7 @@ namespace CommunityApp.Pages.Communities
         public int CommunityId { get; set; }
         public Community? Community { get; set; }
         public bool CanDelete { get; set; } = false;
-        public bool CanManageManagers { get; set; } = false;
+        public bool CanManageCommunity { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -38,8 +38,8 @@ namespace CommunityApp.Pages.Communities
                 }
 
                 var isAdmin = await _authorizationService.AuthorizeAsync(User, "AdminOnly");
-                CanManageManagers = isAdmin.Succeeded;
-                CanDelete = isAdmin.Succeeded && Community.Homes.Count == 0;
+                CanManageCommunity = isAdmin.Succeeded;
+                CanDelete = Community.Homes.Count == 0;
 
                 return Page();
             }
