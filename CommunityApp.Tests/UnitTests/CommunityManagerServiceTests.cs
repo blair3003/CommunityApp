@@ -49,6 +49,31 @@ namespace CommunityApp.Tests.UnitTests
         }
 
         [Fact]
+        public async Task GetHomesByManagerIdAsync_ReturnsHomesForManager()
+        {
+            // Arrange
+            var homes = new List<Home>
+            {
+                new() { Id = 1, CommunityId = 1, Number = "1" },
+                new() { Id = 2, CommunityId = 1, Number = "2" }
+            };
+
+            _mockRepository
+                .Setup(repo => repo.GetHomesByManagerIdAsync("1"))
+                .ReturnsAsync(homes);
+
+            // Act
+            var result = await _communityManagerService.GetHomesByManagerIdAsync("1");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, c => c.Number == "1");
+            Assert.Contains(result, c => c.Number == "2");
+            _mockRepository.Verify(repo => repo.GetHomesByManagerIdAsync("1"), Times.Once);
+        }
+
+        [Fact]
         public async Task AddManagerToCommunityAsync_AddsManager()
         {
             // Arrange            

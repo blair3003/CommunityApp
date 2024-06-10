@@ -19,15 +19,18 @@ namespace CommunityApp.Pages.Communities
         private readonly CommunityManagerService _communityManagerService = communityManagerService;
         private readonly IAuthorizationService _authorizationService = authorizationService;
         private readonly ILogger<IndexModel> _logger = logger;
+
         public List<Community> Communities { get; set; } = [];
+        public bool CanManageAllCommunities { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 var isAdmin = await _authorizationService.AuthorizeAsync(User, "AdminOnly");
+                CanManageAllCommunities = isAdmin.Succeeded;
 
-                if (isAdmin.Succeeded)
+                if (CanManageAllCommunities)
                 {
                     Communities = await _communityService.GetAllCommunitiesAsync();
                 }

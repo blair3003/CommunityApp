@@ -5,25 +5,30 @@
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
 
-    <form method="post">
+            <form method="post">
 
-        <div class="form-group mb-2">
-            <label asp-for="UserId"></label>
-            <select asp-for="UserId" class="form-control" required>
-                <option value="">-- Select Manager --</option>
-                @foreach (var manager in Model.Managers)
-                {
-                    <option value="@manager.Id">@manager.UserName</option>
-                }
-            </select>
-            <span asp-validation-for="UserId" class="text-danger"></span>
+                <div class="form-group mb-2">
+                    <label asp-for="UserId"></label>
+                    <select asp-for="UserId" class="form-control" required>
+                        <option value="">-- Select Manager --</option>
+                        @foreach (var manager in Model.Managers)
+                        {
+                            <option value="@manager.Id">@manager.UserName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add</button>
+                <a asp-page="./Details" asp-route-CommunityId="@Model.CommunityId" class="btn btn-secondary">Cancel</a>
+            </form>
+
         </div>
-
-        <button type="submit" class="btn btn-primary">Add</button>
-
-    </form>
+    </div>
 </section>
 
 @section Scripts {

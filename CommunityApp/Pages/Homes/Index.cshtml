@@ -1,4 +1,48 @@
 ﻿@page
 @model CommunityApp.Pages.Homes.IndexModel
 @{
+    ViewData["Title"] = Model.CanManageAllHomes ? "All Homes" : "My Homes";
 }
+
+<section class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Zip</th>
+                        <th>Type</th>
+                        <th>Bedrooms</th>
+                        <th>Base Rent</th>
+                        <th>Community</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var home in Model.Homes)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="./Details" asp-route-HomeId="@home.Id">
+                                    @home.Number @home.Street, @home.City, @home.State
+                                </a>
+                            </td>
+                            <td>@home.Zip</td>
+                            <td>@home.Type</td>
+                            <td>@home.Bedrooms</td>
+                            <td>@home.BaseRent.ToString("C")</td>
+                            <td>
+                                <a asp-page="/Communities/Details" asp-route-CommunityId="@home.CommunityId">
+                                    @home.Community.Name
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>

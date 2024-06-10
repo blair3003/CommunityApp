@@ -18,6 +18,19 @@ namespace CommunityApp.Data.Repositories
             return managerCommunities;
         }
 
+        public async Task<List<Home>> GetHomesByManagerIdAsync(string managerId)
+        {
+            var managerHomes = await _context.Homes
+                .Include(h => h.Community)
+                    .ThenInclude(c => c!.Managers)
+                .Where(
+                    h => h.Community!.Managers.Any(
+                        m => m.Id == managerId))
+                .ToListAsync();
+
+            return managerHomes;
+        }
+
         public async Task<bool> AddManagerToCommunityAsync(string managerId, int communityId)
         {
             var manager = await _context.Users.FindAsync(managerId);

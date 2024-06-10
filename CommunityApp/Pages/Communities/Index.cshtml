@@ -1,19 +1,36 @@
 ﻿@page
 @model CommunityApp.Pages.Communities.IndexModel
 @{
-    ViewData["Title"] = "All Communities";
+    ViewData["Title"] = Model.CanManageAllCommunities ? "All Communities" : "My Communities";
 }
 
 <section class="container mt-4">
-    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
 
-    <a asp-page="./Create">Create New</a>
+            @if (Model.CanManageAllCommunities)
+            {
+                <a asp-page="./Create" class="btn btn-success mb-3">Create new Community</a>                
+            }
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var community in Model.Communities)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="./Details" asp-route-CommunityId="@community.Id">@community.Name</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-    <ul>
-        @foreach (var community in Model.Communities)
-        {
-            <li><a asp-page="./Details" asp-route-CommunityId="@community.Id">@community.Name</a></li>
-        }
-    </ul>
-
+        </div>
+    </div>
 </section>
