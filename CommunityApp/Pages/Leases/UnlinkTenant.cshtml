@@ -1,0 +1,23 @@
+﻿@page "/Leases/{LeaseId:int}/UnlinkTenant/{UserId}"
+@model CommunityApp.Pages.Leases.UnlinkTenantModel
+@{
+    ViewData["Title"] = "Unlink Tenant";
+}
+
+<section class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+
+            <form method="post">
+
+                <p class="text-danger">Are you sure you want to unlink this Tenant from the Lease?</p>
+
+                <button type="submit" class="btn btn-danger">Unlink</button>
+                <a asp-page="./Details" asp-route-LeaseId="@Model.LeaseId" class="btn btn-secondary">Cancel</a>
+
+            </form>
+
+        </div>
+    </div>
+</section>

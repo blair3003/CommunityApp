@@ -36,12 +36,14 @@ builder.Services.AddScoped<ICommunityManagerRepository, CommunityManagerReposito
 builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILeaseRepository, LeaseRepository>();
+builder.Services.AddScoped<ILeaseTenantRepository, LeaseTenantRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<CommunityService>();
 builder.Services.AddScoped<CommunityManagerService>();
 builder.Services.AddScoped<HomeService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<LeaseService>();
+builder.Services.AddScoped<LeaseTenantService>();
 builder.Services.AddScoped<PaymentService>();
 
 builder.Services.AddRazorPages();

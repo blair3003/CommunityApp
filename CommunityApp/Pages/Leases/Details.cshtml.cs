@@ -24,6 +24,7 @@ namespace CommunityApp.Pages.Leases
 
 		public bool CanMakePayment { get; set; } = false;
 		public bool CanManageLease { get; set; } = false;
+		public bool HasLinkedTenant { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync()
 		{
@@ -45,6 +46,7 @@ namespace CommunityApp.Pages.Leases
 
                 CanMakePayment = tenantAuthorization.Succeeded;
                 CanManageLease = managerAuthorization.Succeeded;
+				HasLinkedTenant = Lease.Tenant != null;
 
                 return Page();
 			}

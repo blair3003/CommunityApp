@@ -1,0 +1,36 @@
+﻿@page "/Leases/{LeaseId:int}/LinkTenant"
+@model CommunityApp.Pages.Leases.LinkTenantModel
+@{
+    ViewData["Title"] = "Link Tenant";
+}
+
+<section class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="form-group mb-2">
+                    <label asp-for="UserId"></label>
+                    <select asp-for="UserId" class="form-control" required>
+                        <option value="">-- Select Tenant --</option>
+                        @foreach (var tenant in Model.Tenants)
+                        {
+                            <option value="@tenant.Id">@tenant.UserName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Link</button>
+                <a asp-page="./Details" asp-route-LeaseId="@Model.LeaseId" class="btn btn-secondary">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

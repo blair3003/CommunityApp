@@ -7,6 +7,7 @@ namespace CommunityApp.Data.Repositories
     public class CommunityManagerRepository(ApplicationDbContext context) : ICommunityManagerRepository
     {
         private readonly ApplicationDbContext _context = context;
+
         public async Task<List<Community>> GetCommunitiesByManagerIdAsync(string managerId)
         {
             var managerCommunities = await _context.Communities

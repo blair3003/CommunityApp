@@ -12,7 +12,7 @@ namespace CommunityApp.Data.Repositories
         {
             var leases = await _context.Leases
                 .Include(l => l.Home)
-                    .ThenInclude(h => h.Community)
+                    .ThenInclude(h => h!.Community)
                 .Include(l => l.Tenant)
                 .ToListAsync();
 
@@ -23,6 +23,8 @@ namespace CommunityApp.Data.Repositories
         {
             var lease = await _context.Leases
                 .Include(l => l.Home)
+                    .ThenInclude(h => h!.Community)
+                    .ThenInclude(c => c!.Managers)
                 .Include(l => l.Tenant)
                 .Include(l => l.Payments)
                 .FirstOrDefaultAsync(l => l.Id == id);

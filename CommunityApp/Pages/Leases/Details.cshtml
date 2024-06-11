@@ -48,15 +48,29 @@
                 </section>
                 <section class="tab-pane fade" id="tenant-info" role="tabpanel" aria-labelledby="tenant-info-tab">
                     <h4 class="visually-hidden">Tenant info</h4>
+                    @if (Model.CanManageLease)
+                    {
+                        @if (!Model.HasLinkedTenant)
+                        {
+                            <a asp-page="./LinkTenant" asp-route-LeaseId="@Model.LeaseId" class="btn btn-info mb-3">Link Tenant</a>
+                        }
+                        else
+                        {
+                            <a asp-page="./UnlinkTenant" asp-route-LeaseId="@Model.LeaseId" asp-route-UserId="@Model.Lease.TenantId" class="btn btn-info mb-3">Unlink Tenant</a>
+                        }
+                    }
                     <dl class="row">
                         <dt class="col-sm-3">Name</dt>
                         <dd class="col-sm-9">@Model.Lease.TenantName</dd>
 
                         <dt class="col-sm-3">Email</dt>
-                        <dd class="col-sm-9">@Model.Lease.TenantEmail</dd>
+                        <dd class="col-sm-9">@Model.Lease.TenantEmail </dd>
 
                         <dt class="col-sm-3">Phone</dt>
                         <dd class="col-sm-9">@Model.Lease.TenantPhone</dd>
+
+                        <dt class="col-sm-3">Is Linked?</dt>
+                        <dd class="col-sm-9">@(Model.HasLinkedTenant ? "✔" : "❌")</dd>
                     </dl>
                 </section>
                 <section class="tab-pane fade" id="home-info" role="tabpanel" aria-labelledby="home-info-tab">
