@@ -64,7 +64,7 @@
                     <h3 class="visually-hidden">Managers</h3>
                     @if (Model.CanManageCommunity)
                     {
-                        <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-info mb-3">Add new Manager</a>
+                        <a asp-page="./AddManager" asp-route-CommunityId="@Model.CommunityId" class="btn btn-success mb-3">Add new Manager</a>
                     }
                     <table class="table table-striped">
                         <thead>
@@ -77,11 +77,11 @@
                             @foreach (var manager in Model.Community.Managers)
                             {
                                 <tr>
-                                    <td>@manager.Email</td>
+                                    <td><a asp-page="/Users/Details" asp-route-UserId="@manager.Id">@manager.Email</a></td>
                                     <td>
                                         @if (Model.CanManageCommunity)
                                         {
-                                            <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id" aria-label="Remove Manager" class="text-decoration-none">❌</a>
+                                            <a asp-page="./RemoveManager" asp-route-CommunityId="@Model.CommunityId" asp-route-UserId="@manager.Id">Remove</a>
                                         }
                                     </td>
                                 </tr>
