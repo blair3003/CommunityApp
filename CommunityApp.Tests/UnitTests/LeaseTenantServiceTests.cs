@@ -23,6 +23,24 @@ namespace CommunityApp.Tests.UnitTests
         }
 
         [Fact]
+        public async Task GetLeaseByTenantIdAsync_ReturnsLeaseForTenant()
+        {
+            // Arrange            
+            var tenantId = "1";
+            var lease = new Lease { Id = 1, HomeId = 1, TenantId = "1", TenantName = "Tenant 1", TenantEmail = "tenant1@forthdev.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) };
+
+            _mockRepository.Setup(repo => repo.GetLeaseByTenantIdAsync(tenantId)).ReturnsAsync(lease);
+
+            // Act
+            var result = await _leaseTenantService.GetLeaseByTenantIdAsync(tenantId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Tenant 1", result.TenantName);
+            _mockRepository.Verify(repo => repo.GetLeaseByTenantIdAsync(tenantId), Times.Once);
+        }
+
+        [Fact]
         public async Task LinkTenantToLeaseAsync_LinksTenantToLease()
         {
             // Arrange            

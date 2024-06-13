@@ -9,6 +9,12 @@ namespace CommunityApp.Services
         private readonly ILeaseTenantRepository _repository = repository;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
+        public async Task<Lease?> GetLeaseByTenantIdAsync(string tenantId)
+        {
+            var tenantLease = await _repository.GetLeaseByTenantIdAsync(tenantId);
+            return tenantLease;
+        }
+
         public async Task<bool> LinkTenantToLeaseAsync(string tenantId, int leaseId)
         {
             var tenantLinked = await _repository.LinkTenantToLeaseAsync(tenantId, leaseId);

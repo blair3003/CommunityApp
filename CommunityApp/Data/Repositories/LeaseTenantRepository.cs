@@ -8,6 +8,12 @@ namespace CommunityApp.Data.Repositories
     {
         private readonly ApplicationDbContext _context = context;
 
+        public async Task<Lease?> GetLeaseByTenantIdAsync(string tenantId)
+        {
+            var tenantLease = await _context.Leases.FirstOrDefaultAsync(l => l.TenantId == tenantId);
+            return tenantLease;
+        }
+
         public async Task<bool> LinkTenantToLeaseAsync(string tenantId, int leaseId)
         {
             var tenant = await _context.Users.FindAsync(tenantId);

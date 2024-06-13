@@ -10,6 +10,32 @@ namespace CommunityApp.Tests.IntegrationTests
         private readonly DatabaseFixture _fixture = fixture;
 
         [Fact]
+        public async Task GetLeaseByTenantIdAsync_ReturnsLeaseForTenant()
+        {
+            var tenant = new ApplicationUser { Id = "1", UserName = "Tenant", Email = "tenant@user.com" };
+            var community = new Community { Id = 1, Name = "Community 1" };
+            var home = new Home { Id = 1, CommunityId = 1, Number = "Home 1" };
+            var lease = new Lease { Id = 1, HomeId = 1, TenantId = "1", TenantName = "Tenant 1", TenantEmail = "tenant@user.com", TenantPhone = "01234567890", MonthlyPayment = 100.00m, PaymentDueDay = 1, LeaseStartDate = new DateTime(2024, 1, 1), LeaseEndDate = new DateTime(2024, 12, 31) };
+
+            using (var context = _fixture.CreateContext())
+            {
+                context.Users.Add(tenant);
+                context.Communities.Add(community);
+                context.Homes.Add(home);
+                context.Leases.Add(lease);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = _fixture.CreateContext())
+            {
+                var repository = new LeaseTenantRepository(context);
+                var result = await repository.GetLeaseByTenantIdAsync("1");
+                Assert.NotNull(result);
+                Assert.Equal("Tenant 1", result.TenantName);
+            }
+        }
+
+        [Fact]
         public async Task LinkTenantToLeaseAsync_LinksTenantToLease()
         {
             var tenant = new ApplicationUser { Id = "1", UserName = "Tenant", Email = "tenant@user.com" };

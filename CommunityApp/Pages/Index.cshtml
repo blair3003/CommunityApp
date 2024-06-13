@@ -1,10 +1,72 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="container mt-4">
+    <h1 class="mb-4">Welcome!</h1>
+
+    @if (!User.HasClaim("IsAdmin", "true") && !User.HasClaim("IsManager", "true"))
+    {
+        <p>Please contact an admin to link to your lease.</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <section class="card">
+                    <h3 class="card-header">Latest Payments</h3>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Description</th>
+                                    <th>Lease</th>
+                                    <th>Community</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model.Payments)
+                                {
+                                    <tr>
+                                        <td><a asp-page="/Payments/Details" asp-route-PaymentId="@payment.Id">@payment.PaymentDate.ToString("MMM d, yyyy")</a></td>
+                                        <td>@payment.Amount.ToString("C")</td>
+                                        <td>@payment.Description</td>
+                                        <td>
+                                            <a asp-page="/Leases/Details" asp-route-LeaseId="@payment.LeaseId">
+                                                @payment.Lease?.TenantName
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-page="/Communities/Details" asp-route-CommunityId="@payment.Lease!.Home!.CommunityId">
+                                                @payment.Lease?.Home?.Community?.Name
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-page="/Payments/Index">View all Payments</a>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-sm-6">
+                <section class="card">
+                    <h3 class="card-header">Latest other</h3>
+                    <div class="card-body">
+
+                    </div>
+                    <div class="card-footer">
+                        <a href="#">View all Other</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    }
+</section>
