@@ -22,6 +22,7 @@ namespace CommunityApp.Data.Repositories
         public async Task<List<Home>> GetHomesByManagerIdAsync(string managerId)
         {
             var managerHomes = await _context.Homes
+                .Include(h => h.Leases)
                 .Include(h => h.Community)
                     .ThenInclude(c => c!.Managers)
                 .Where(

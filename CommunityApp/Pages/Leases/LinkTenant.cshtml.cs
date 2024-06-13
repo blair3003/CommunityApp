@@ -33,7 +33,9 @@ namespace CommunityApp.Pages.Leases
             {
                 var users = await _userService.GetAllUsersAsync();
 
-                Tenants = users.Where(u => !u.IsManager && !u.IsAdmin).ToList();
+                Tenants = users
+                    .Where(u => !u.IsManager && !u.IsAdmin)
+                    .ToList();
 
                 return Page();
             }

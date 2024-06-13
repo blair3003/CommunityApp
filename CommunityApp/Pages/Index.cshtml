@@ -15,7 +15,8 @@
     {
         <div class="row">
             <div class="col-sm-6">
-                <section class="card">
+
+                <section class="card mb-4">
                     <h3 class="card-header">Latest Payments</h3>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -54,18 +55,132 @@
                         <a asp-page="/Payments/Index">View all Payments</a>
                     </div>
                 </section>
-            </div>
 
+            </div>
             <div class="col-sm-6">
-                <section class="card">
-                    <h3 class="card-header">Latest other</h3>
+
+                <section class="card mb-4">
+                    <h3 class="card-header">Overdue Payments</h3>
                     <div class="card-body">
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tenant</th>
+                                    <th>Monthly Payment</th>
+                                    <th>Due Day</th>
+                                    <th>Community</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var overdue in Model.Overdues)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-page="/Leases/Details" asp-route-LeaseId="@overdue.Id">@overdue.TenantName</a>
+                                        </td>
+                                        <td>@overdue.MonthlyPayment.ToString("C")</td>
+                                        <td>@overdue.PaymentDueDay</td>
+                                        <td>
+                                            <a asp-page="/Communities/Details" asp-route-CommunityId="@overdue.Home!.CommunityId">
+                                                @overdue.Home?.Community?.Name
+                                            </a>                                
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-page="/Leases/Index">View all Leases</a>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <div class="row mb-4">            
+            <div class="col-sm-6">
+
+                <section class="card mb-4">
+                    <h3 class="card-header">New Leases</h3>
+                    <div class="card-body">
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tenant</th>
+                                    <th>Monthly Payment</th>
+                                    <th>Start Date</th>
+                                    <th>Community</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var lease in Model.Leases)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-page="/Leases/Details" asp-route-LeaseId="@lease.Id">@lease.TenantName</a>
+                                        </td>
+                                        <td>@lease.MonthlyPayment.ToString("C")</td>
+                                        <td>@lease.LeaseStartDate.ToString("MMM d, yyyy")</td>
+                                        <td>
+                                            <a asp-page="/Communities/Details" asp-route-CommunityId="@lease.Home!.CommunityId">
+                                                @lease.Home?.Community?.Name
+                                            </a>                                
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
 
                     </div>
                     <div class="card-footer">
-                        <a href="#">View all Other</a>
+                        <a asp-page="/Leases/Index">View all Leases</a>
                     </div>
                 </section>
+
+            </div>
+            <div class="col-sm-6">
+
+                <section class="card mb-4">
+                    <h3 class="card-header">Available Homes</h3>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Bedrooms</th>
+                                    <th>Base Rent</th>
+                                    <th>Community</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var home in Model.Homes)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-page="/Homes/Details" asp-route-HomeId="@home.Id">
+                                                @home.Type
+                                            </a>
+                                        </td>
+                                        <td>@home.Bedrooms</td>
+                                        <td>@home.BaseRent.ToString("C")</td>
+                                        <td>
+                                            <a asp-page="/Communities/Details" asp-route-CommunityId="@home.CommunityId">
+                                                @home.Community?.Name
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-page="/Homes/Index">View all Homes</a>
+                    </div>
+                </section>
+
             </div>
         </div>
     }

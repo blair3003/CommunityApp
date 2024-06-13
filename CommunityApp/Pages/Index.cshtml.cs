@@ -8,6 +8,8 @@ using CommunityApp.Data.Models;
 namespace CommunityApp.Pages
 {
     public class IndexModel(
+        HomeService homeService,
+        LeaseService leaseService,
         LeaseTenantService leaseTenantService,
         PaymentService paymentService,
         CommunityManagerService communityManagerService,
@@ -15,6 +17,8 @@ namespace CommunityApp.Pages
         ILogger<IndexModel> logger
         ) : PageModel
     {
+        private readonly HomeService _homeService = homeService;
+        private readonly LeaseService _leaseService = leaseService;
         private readonly LeaseTenantService _leaseTenantService = leaseTenantService;
         private readonly PaymentService _paymentService = paymentService;
         private readonly CommunityManagerService _communityManagerService = communityManagerService;
@@ -22,6 +26,9 @@ namespace CommunityApp.Pages
         private readonly ILogger<IndexModel> _logger = logger;
 
         public List<Payment> Payments { get; set; } = [];
+        public List<Lease> Overdues { get; set; } = [];
+        public List<Lease> Leases { get; set; } = [];
+        public List<Home> Homes { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -48,14 +55,35 @@ namespace CommunityApp.Pages
                 if (isAdmin.Succeeded)
                 {
                     Payments = await _paymentService.GetAllPaymentsAsync();
+                    Leases = await _leaseService.GetAllLeasesAsync();
+                    Overdues = await _leaseService.GetAllLeasesAsync();
+                    Homes = await _homeService.GetAllHomesAsync();
                 }
                 else
                 {
-                    Payments = await _communityManagerService.GetPaymentsByManagerIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+                    Payments = await _communityManagerService.GetPaymentsByManagerIdAsync(userId!);
+                    Leases = await _communityManagerService.GetLeasesByManagerIdAsync(userId!);
+                    Overdues = await _communityManagerService.GetLeasesByManagerIdAsync(userId!);
+                    Homes = await _communityManagerService.GetHomesByManagerIdAsync(userId!);
                 }
 
                 Payments = Payments
                     .OrderByDescending(p => p.PaymentDate)
+                    .Take(5)
+                    .ToList();
+
+                Overdues = Overdues
+                    .Where(lease => !lease.Payments.Any(payment => payment.PaymentDate >= DateTime.Now.AddDays(-31)))
+                    .Take(5)
+                    .ToList();
+
+                Leases = Leases
+                    .OrderByDescending(l => l.LeaseStartDate)
+                    .Take(5)
+                    .ToList();
+
+                Homes = Homes
+                    .Where(h => !h.Leases.Any(l => l.IsActive))
                     .Take(5)
                     .ToList();
 
