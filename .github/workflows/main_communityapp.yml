@@ -22,11 +22,18 @@ jobs:
           dotnet-version: '8.0.x'
           include-prerelease: true
 
+      - name: Restore dependencies
+        run: dotnet restore
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Publish with dotnet
+        run: dotnet publish --configuration Release --output ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Ensure database file is copied
+        run: |
+          cp localdatabase.db ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
