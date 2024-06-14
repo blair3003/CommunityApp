@@ -22,16 +22,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: List files in repository
-        run: ls -alh
-        
-      - name: Check SQLite database file existence
-        run: |
-          echo "Listing files in the root directory:"
-          ls -alh
-          echo "Listing files in the publish directory:"
-          ls -alh ${{env.DOTNET_ROOT}}/myapp
-
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -41,7 +31,7 @@ jobs:
       - name: Copy SQLite database
         run: |
           # Copy the SQLite database file to the publish directory
-          cp ./localdatabase.db ${{env.DOTNET_ROOT}}/myapp
+          Copy-Item -Path ./localdatabase.db -Destination $env:DOTNET_ROOT/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -70,3 +60,15 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_730765B90E2D470B9778505594F2FF2C }}
           package: .
+
+      - name: List files in repository
+        shell: pwsh
+        run: Get-ChildItem -Recurse
+
+      - name: Check SQLite database file existence
+        shell: pwsh
+        run: |
+          Write-Host "Listing files in the root directory:"
+          Get-ChildItem
+          Write-Host "Listing files in the publish directory:"
+          Get-ChildItem -Path $env:DOTNET_ROOT/myapp
