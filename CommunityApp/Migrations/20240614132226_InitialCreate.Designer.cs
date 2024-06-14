@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommunityApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240526141735_UpdateHomeNumberToString")]
-    partial class UpdateHomeNumberToString
+    [Migration("20240614132226_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,82 @@ namespace CommunityApp.Migrations
                     b.HasIndex("CommunityId");
 
                     b.ToTable("Homes");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.Lease", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("DepositAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("HomeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LeaseEndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LeaseStartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("MonthlyPayment")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PaymentDueDay")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TenantEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenantId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenantPhone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Leases");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LeaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeaseId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -385,6 +461,34 @@ namespace CommunityApp.Migrations
                     b.Navigation("Community");
                 });
 
+            modelBuilder.Entity("CommunityApp.Data.Models.Lease", b =>
+                {
+                    b.HasOne("CommunityApp.Data.Models.Home", "Home")
+                        .WithMany("Leases")
+                        .HasForeignKey("HomeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CommunityApp.Data.Models.ApplicationUser", "Tenant")
+                        .WithMany("Leases")
+                        .HasForeignKey("TenantId");
+
+                    b.Navigation("Home");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.Payment", b =>
+                {
+                    b.HasOne("CommunityApp.Data.Models.Lease", "Lease")
+                        .WithMany("Payments")
+                        .HasForeignKey("LeaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lease");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -439,6 +543,21 @@ namespace CommunityApp.Migrations
             modelBuilder.Entity("CommunityApp.Data.Models.Community", b =>
                 {
                     b.Navigation("Homes");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.Home", b =>
+                {
+                    b.Navigation("Leases");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.Lease", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("CommunityApp.Data.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Leases");
                 });
 #pragma warning restore 612, 618
         }

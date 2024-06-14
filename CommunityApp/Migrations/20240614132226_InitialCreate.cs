@@ -201,8 +201,8 @@ namespace CommunityApp.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CommunityId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Number = table.Column<int>(type: "INTEGER", nullable: false),
                     Floor = table.Column<int>(type: "INTEGER", nullable: false),
+                    Number = table.Column<string>(type: "TEXT", nullable: true),
                     Street = table.Column<string>(type: "TEXT", nullable: true),
                     City = table.Column<string>(type: "TEXT", nullable: true),
                     State = table.Column<string>(type: "TEXT", nullable: true),
@@ -236,6 +236,62 @@ namespace CommunityApp.Migrations
                         name: "FK_Homes_Communities_CommunityId",
                         column: x => x.CommunityId,
                         principalTable: "Communities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Leases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    HomeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TenantId = table.Column<string>(type: "TEXT", nullable: true),
+                    TenantName = table.Column<string>(type: "TEXT", nullable: false),
+                    TenantEmail = table.Column<string>(type: "TEXT", nullable: false),
+                    TenantPhone = table.Column<string>(type: "TEXT", nullable: false),
+                    MonthlyPayment = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DepositAmount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    PaymentDueDay = table.Column<int>(type: "INTEGER", nullable: false),
+                    LeaseStartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LeaseEndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Notes = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Leases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Leases_AspNetUsers_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Leases_Homes_HomeId",
+                        column: x => x.HomeId,
+                        principalTable: "Homes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LeaseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_Leases_LeaseId",
+                        column: x => x.LeaseId,
+                        principalTable: "Leases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -286,6 +342,21 @@ namespace CommunityApp.Migrations
                 name: "IX_Homes_CommunityId",
                 table: "Homes",
                 column: "CommunityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Leases_HomeId",
+                table: "Leases",
+                column: "HomeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Leases_TenantId",
+                table: "Leases",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_LeaseId",
+                table: "Payments",
+                column: "LeaseId");
         }
 
         /// <inheritdoc />
@@ -310,13 +381,19 @@ namespace CommunityApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Homes");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Leases");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Homes");
 
             migrationBuilder.DropTable(
                 name: "Communities");
