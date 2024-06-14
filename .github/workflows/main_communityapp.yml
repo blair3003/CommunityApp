@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - CommunityApp
 
 on:
@@ -31,9 +28,10 @@ jobs:
       - name: Publish with dotnet
         run: dotnet publish --configuration Release --output ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Ensure database file is copied
+      - name: Copy SQLite database
         run: |
-          cp localdatabase.db ${{env.DOTNET_ROOT}}/myapp
+          # Copy the SQLite database file to the publish directory
+          cp ./localdatabase.db ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
