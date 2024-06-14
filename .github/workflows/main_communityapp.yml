@@ -22,6 +22,16 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: List files in repository
+        run: ls -alh
+        
+      - name: Check SQLite database file existence
+        run: |
+          echo "Listing files in the root directory:"
+          ls -alh
+          echo "Listing files in the publish directory:"
+          ls -alh ${{env.DOTNET_ROOT}}/myapp
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
