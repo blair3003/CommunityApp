@@ -28,9 +28,28 @@ jobs:
       - name: Publish with dotnet
         run: dotnet publish --configuration Release --output ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Copy SQLite database
+      - name: List files in repository
+        shell: pwsh
+        run: Get-ChildItem -Recurse
+
+      - name: Check current directory
+        shell: pwsh
         run: |
-          # Copy the SQLite database file to the publish directory
+          Write-Host "Current Directory:"
+          Get-Location
+
+      - name: Check for SQLite database file existence
+        shell: pwsh
+        run: |
+          if (Test-Path -Path "./localdatabase.db") {
+            Write-Host "SQLite database file found."
+          } else {
+            Write-Host "SQLite database file not found."
+          }
+
+      - name: Copy SQLite database
+        shell: pwsh
+        run: |
           Copy-Item -Path ./localdatabase.db -Destination $env:DOTNET_ROOT/myapp
 
       - name: Upload artifact for deployment job
@@ -61,14 +80,6 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_730765B90E2D470B9778505594F2FF2C }}
           package: .
 
-      - name: List files in repository
+      - name: List files in deployment package
         shell: pwsh
-        run: Get-ChildItem -Recurse
-
-      - name: Check SQLite database file existence
-        shell: pwsh
-        run: |
-          Write-Host "Listing files in the root directory:"
-          Get-ChildItem
-          Write-Host "Listing files in the publish directory:"
-          Get-ChildItem -Path $env:DOTNET_ROOT/myapp
+        run: Get-ChildItem -Path $env:DOTNET_ROOT/myapp -Recurse
