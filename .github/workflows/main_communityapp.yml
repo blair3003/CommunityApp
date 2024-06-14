@@ -41,7 +41,7 @@ jobs:
       - name: Check for SQLite database file existence
         shell: pwsh
         run: |
-          if (Test-Path -Path "./localdatabase.db") {
+          if (Test-Path -Path "./CommunityApp/localdatabase.db") {
             Write-Host "SQLite database file found."
           } else {
             Write-Host "SQLite database file not found."
@@ -50,7 +50,7 @@ jobs:
       - name: Copy SQLite database
         shell: pwsh
         run: |
-          Copy-Item -Path ./localdatabase.db -Destination $env:DOTNET_ROOT/myapp
+          Copy-Item -Path ./CommunityApp/localdatabase.db -Destination $env:DOTNET_ROOT/myapp -Force
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
