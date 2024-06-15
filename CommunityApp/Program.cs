@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using CommunityApp.Data;
 using CommunityApp.Data.Models;
 using CommunityApp.Data.Repositories;
 using CommunityApp.Data.Repositories.Interfaces;
+using CommunityApp.Data.Seeders;
 using CommunityApp.Policies;
 using CommunityApp.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+using CommunityApp.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,11 +48,14 @@ builder.Services.AddScoped<LeaseService>();
 builder.Services.AddScoped<LeaseTenantService>();
 builder.Services.AddScoped<PaymentService>();
 
+builder.Services.AddScoped<DatabaseSeeder>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseDatabaseSeeder();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -58,7 +63,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
