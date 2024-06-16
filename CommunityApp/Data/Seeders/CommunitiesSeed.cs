@@ -10,31 +10,14 @@ namespace CommunityApp.Data.Seeders
         {
             if (!_context.Communities.Any())
             {
-                var communities = new List<Community>();
-                var communityNames = new string[]
+                var communities = new List<Community>()
                 {
-                    "Harmony Heights",
-                    "Serenity Springs",
-                    "Tranquil Grove",
-                    "Whispering Pines",
-                    "Radiant Meadows",
-                    "Emerald Vista",
-                    "Sunset Ridge",
-                    "Azure Haven",
-                    "Enchanted Woods",
-                    "Crystal Waters"
+                    new() { Name = "Harmony Heights" },
+                    new() { Name = "Serenity Springs" },
+                    new() { Name = "Tranquil Grove" },
+                    new() { Name = "Whispering Pines" },
+                    new() { Name = "Radiant Meadows" }
                 };
-
-                foreach (string communityName in communityNames)
-                {
-                    var community = new Community
-                    {
-                        Name = communityName,
-                        // Optionally, you can seed other properties here
-                    };
-
-                    communities.Add(community);
-                }
 
                 await _context.Communities.AddRangeAsync(communities);
                 await _context.SaveChangesAsync();

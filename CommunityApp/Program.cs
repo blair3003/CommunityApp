@@ -53,9 +53,13 @@ builder.Services.AddScoped<LeaseService>();
 builder.Services.AddScoped<LeaseTenantService>();
 builder.Services.AddScoped<PaymentService>();
 
-builder.Services.AddScoped<CommunitiesSeed>();
-builder.Services.AddScoped<HomesSeed>();
 builder.Services.AddScoped<AdminUserSeed>();
+builder.Services.AddScoped<ManagerUsersSeed>();
+builder.Services.AddScoped<CommunitiesSeed>();
+builder.Services.AddScoped<CommunityManagersSeed>();
+builder.Services.AddScoped<HomesSeed>();
+builder.Services.AddScoped<LeasesSeed>();
+builder.Services.AddScoped<PaymentsSeed>();
 builder.Services.AddScoped<DatabaseSeeder>();
 
 builder.Services.AddRazorPages();
