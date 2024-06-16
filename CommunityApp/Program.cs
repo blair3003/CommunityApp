@@ -11,7 +11,10 @@ using CommunityApp.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddEnvironmentVariables();
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Configuration["AdminPassword"] = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+}
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
