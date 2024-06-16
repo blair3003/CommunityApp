@@ -49,6 +49,7 @@ builder.Services.AddScoped<LeaseTenantService>();
 builder.Services.AddScoped<PaymentService>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
+builder.Services.AddScoped<AdminUserSeed>();
 
 builder.Services.AddRazorPages();
 
