@@ -1,23 +1,15 @@
-﻿using CommunityApp.Data.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-
-namespace CommunityApp.Data.Seeders
+﻿namespace CommunityApp.Data.Seeders
 {
-    public class DatabaseSeeder
+    public class DatabaseSeeder(
+        IServiceProvider serviceProvider,
+        ILogger<DatabaseSeeder> logger,
+        AdminUserSeed adminUserSeed,
+        CommunitiesSeed communitiesSeed)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<DatabaseSeeder> _logger;
-        private readonly AdminUserSeed _adminUserSeed;
-
-        public DatabaseSeeder(IServiceProvider serviceProvider, ILogger<DatabaseSeeder> logger, AdminUserSeed adminUserSeed)
-        {
-            _serviceProvider = serviceProvider;
-            _logger = logger;
-            _adminUserSeed = adminUserSeed;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly ILogger<DatabaseSeeder> _logger = logger;
+        private readonly AdminUserSeed _adminUserSeed = adminUserSeed;
+        private readonly CommunitiesSeed _communitiesSeed = communitiesSeed;
 
         public void Seed()
         {
@@ -26,6 +18,7 @@ namespace CommunityApp.Data.Seeders
                 try
                 {
                     _adminUserSeed.InitializeAsync().GetAwaiter().GetResult();
+                    _communitiesSeed.InitializeAsync().GetAwaiter().GetResult();
                 }
                 catch (Exception ex)
                 {
