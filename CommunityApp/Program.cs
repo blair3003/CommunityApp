@@ -54,6 +54,7 @@ builder.Services.AddScoped<LeaseTenantService>();
 builder.Services.AddScoped<PaymentService>();
 
 builder.Services.AddScoped<CommunitiesSeed>();
+builder.Services.AddScoped<HomesSeed>();
 builder.Services.AddScoped<AdminUserSeed>();
 builder.Services.AddScoped<DatabaseSeeder>();
 
