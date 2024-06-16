@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using CommunityApp.Data.Models;
 
 namespace CommunityApp.Data.Seeders
 {
-    public class AdminUserSeed
+    public class AdminUserSeed(UserManager<ApplicationUser> userManager, IConfiguration configuration)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
-
-        public AdminUserSeed(UserManager<ApplicationUser> userManager, IConfiguration configuration)
-        {
-            _userManager = userManager;
-            _configuration = configuration;
-        }
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly IConfiguration _configuration = configuration;
 
         public async Task InitializeAsync()
         {
