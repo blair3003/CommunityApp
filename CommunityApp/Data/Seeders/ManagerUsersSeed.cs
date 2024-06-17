@@ -14,14 +14,6 @@ namespace CommunityApp.Data.Seeders
                 new() {
                     UserName = "managertom@communityapp.com",
                     Email = "managertom@community.com",
-                },
-                new() {
-                    UserName = "managerwilson@communityapp.com",
-                    Email = "managerwilson@community.com",
-                },
-                new() {
-                    UserName = "manageralex@communityapp.com",
-                    Email = "manageralex@community.com",
                 }
             };
 

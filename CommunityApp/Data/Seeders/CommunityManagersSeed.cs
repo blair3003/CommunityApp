@@ -1,5 +1,6 @@
 ﻿using CommunityApp.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunityApp.Data.Seeders
 {
@@ -10,29 +11,31 @@ namespace CommunityApp.Data.Seeders
 
         public async Task InitializeAsync()
         {
-            var usersWithManagerClaim = await _userManager
-                .GetUsersForClaimAsync(new System.Security.Claims.Claim("IsManager", "true"));
+            var managerClaim = new System.Security.Claims.Claim("IsManager", "true");
+            var adminClaim = new System.Security.Claims.Claim("IsAdmin", "true");
 
-            var admins = await _userManager
-                .GetUsersForClaimAsync(new System.Security.Claims.Claim("IsAdmin", "true"));
+            var usersWithManagerClaimTask = _userManager.GetUsersForClaimAsync(managerClaim);
+            var adminsTask = _userManager.GetUsersForClaimAsync(adminClaim);
 
-            var managers = usersWithManagerClaim.Except(admins).ToList();
+            await Task.WhenAll(usersWithManagerClaimTask, adminsTask);
 
-            var communities = _context.Communities;
+            var usersWithManagerClaim = await usersWithManagerClaimTask;
+            var admins = await adminsTask;
 
-            if (managers.Count > 0)
+            var manager = usersWithManagerClaim.Except(admins).FirstOrDefault();
+
+            if (manager != null)
             {
-                int managersIndex = 0;
+                var communities = _context.Communities.Include(c => c.Managers);
 
-                foreach (var community in communities)
+                foreach (var community in communities.Where(c => c.Managers.Count == 0))
                 {
-                    var manager = managers[managersIndex];
                     community.Managers.Add(manager);
-                    managersIndex = (managersIndex + 1) % managers.Count;
                 }
 
                 await _context.SaveChangesAsync();
             }
         }
+
     }
 }

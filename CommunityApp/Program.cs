@@ -8,6 +8,7 @@ using CommunityApp.Data.Seeders;
 using CommunityApp.Policies;
 using CommunityApp.Services;
 using CommunityApp.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
