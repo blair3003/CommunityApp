@@ -2,7 +2,7 @@
 
 **Community is a property management application that demonstrates a basic ASP.NET Core implementation. The application uses standard features such as authentication, authorisation and CRUD resource management.**
 
-[communityapp.azurewebsites.net](communityapp.azurewebsites.net)
+[communityapp.azurewebsites.net](https://communityapp.azurewebsites.net)
 
 ## App details
 
