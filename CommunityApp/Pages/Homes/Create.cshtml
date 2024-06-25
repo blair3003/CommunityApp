@@ -60,8 +60,8 @@
                     </div>
                     <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.Type"></label>
-                        <select asp-for="Input.Type" class="form-control" asp-items="Html.GetEnumSelectList<CommunityApp.Data.Models.Type>()">
-                            <option value="">Select</option>
+                        <select asp-for="Input.Type" class="form-select" asp-items="Html.GetEnumSelectList<CommunityApp.Data.Models.Type>()">
+                            <option value="">-- Select --</option>
                         </select>
                         <span asp-validation-for="Input.Type" class="text-danger"></span>
                     </div>
@@ -82,27 +82,27 @@
 
                 <div class="row">
                     <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Input.IsFurnished"></label>
+                        <input asp-for="Input.IsFurnished" type="checkbox" class="form-check-input" />
+                        <span asp-validation-for="Input.IsFurnished" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.SqFt"></label>
                         <input asp-for="Input.SqFt" class="form-control" />
                         <span asp-validation-for="Input.SqFt" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-6 mb-3">
-                        <label asp-for="Input.YearBuilt"></label>
-                        <input asp-for="Input.YearBuilt" class="form-control" />
-                        <span asp-validation-for="Input.YearBuilt" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Input.YearBuilt"></label>
+                        <input asp-for="Input.YearBuilt" class="form-control" />
+                        <span asp-validation-for="Input.YearBuilt" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.YearRenovated"></label>
                         <input asp-for="Input.YearRenovated" class="form-control" />
                         <span asp-validation-for="Input.YearRenovated" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-6 mb-3">
-                        <label asp-for="Input.IsFurnished"></label>
-                        <input asp-for="Input.IsFurnished" type="checkbox" class="form-check-input" />
-                        <span asp-validation-for="Input.IsFurnished" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -152,15 +152,15 @@
                 <div class="row">
                     <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.Laundry"></label>
-                        <select asp-for="Input.Laundry" class="form-control" asp-items="Html.GetEnumSelectList<Laundry>()">
-                            <option value="">Select</option>
+                        <select asp-for="Input.Laundry" class="form-select" asp-items="Html.GetEnumSelectList<Laundry>()">
+                            <option value="">-- Select --</option>
                         </select>
                         <span asp-validation-for="Input.Laundry" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.Heating"></label>
-                        <select asp-for="Input.Heating" class="form-control" asp-items="Html.GetEnumSelectList<Heating>()">
-                            <option value="">Select</option>
+                        <select asp-for="Input.Heating" class="form-select" asp-items="Html.GetEnumSelectList<Heating>()">
+                            <option value="">-- Select --</option>
                         </select>
                         <span asp-validation-for="Input.Heating" class="text-danger"></span>
                     </div>
@@ -169,15 +169,15 @@
                 <div class="row">
                     <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.Cooling"></label>
-                        <select asp-for="Input.Cooling" class="form-control" asp-items="Html.GetEnumSelectList<Cooling>()">
-                            <option value="">Select</option>
+                        <select asp-for="Input.Cooling" class="form-select" asp-items="Html.GetEnumSelectList<Cooling>()">
+                            <option value="">-- Select --</option>
                         </select>
                         <span asp-validation-for="Input.Cooling" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6 mb-3">
                         <label asp-for="Input.OutdoorSpace"></label>
-                        <select asp-for="Input.OutdoorSpace" class="form-control" asp-items="Html.GetEnumSelectList<OutdoorSpace>()">
-                            <option value="">Select</option>
+                        <select asp-for="Input.OutdoorSpace" class="form-select" asp-items="Html.GetEnumSelectList<OutdoorSpace>()">
+                            <option value="">-- Select --</option>
                         </select>
                         <span asp-validation-for="Input.OutdoorSpace" class="text-danger"></span>
                     </div>
