@@ -12,7 +12,7 @@
             <form method="post">
 
                 <div class="form-group mb-2">
-                    <label asp-for="UserId"></label>
+                    <label asp-for="UserId">Tenant</label>
                     <select asp-for="UserId" class="form-select" required>
                         <option value="">-- Select Tenant --</option>
                         @foreach (var tenant in Model.Tenants)
