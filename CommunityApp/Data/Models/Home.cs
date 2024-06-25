@@ -56,7 +56,7 @@ namespace CommunityApp.Data.Models
     }
 
     public enum Type { Apartment, House, Condo, Townhouse, Duplex }
-    public enum Laundry { InUnit, [Display(Name = "On-site")] OnSite, Other, None }
+    public enum Laundry { [Display(Name = "In Unit")] InUnit, [Display(Name = "On Site")] OnSite, Other, None }
     public enum Heating { Central, Electric, Gas, Other, None }
     public enum Cooling { Central, [Display(Name = "Window Unit")] WindowUnit, Other, None }
     public enum OutdoorSpace { Balcony, Patio, Yard, Other, None }
